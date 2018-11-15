@@ -12,7 +12,7 @@ from mmpServer import MmpServer
 
 # TODO: build, delete file
 class DfsServer:
-    def __init__(self):
+    def __init__(self, mmp_list):
         # ----------------------------
         # membership server params
         # ----------------------------

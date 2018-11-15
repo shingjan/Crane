@@ -8,8 +8,8 @@ import select
 import glob
 
 class MmpServer:
-    def __init__(self, membership_list):
-        self.membership_list = membership_list
+    def __init__(self, mmp_list):
+        self.membership_list = []
         self.neighbors = []
         self.ip_list = {
             "172.22.158.208": 1,
@@ -43,7 +43,21 @@ class MmpServer:
             'ask': (self.mmp_socket_list[7], 7),
             'info': (self.mmp_socket_list[8], 8),
         }
+        self.lock_list = {
+            "172.22.158.208": threading.Event(),
+            "172.22.154.209": threading.Event(),
+            "172.22.156.209": threading.Event(),
+            "172.22.158.209": threading.Event(),
+            "172.22.154.210": threading.Event(),
+            "172.22.156.210": threading.Event(),
+            "172.22.158.210": threading.Event(),
+            "172.22.154.211": threading.Event(),
+            "172.22.156.211": threading.Event(),
+            "172.22.158.211": threading.Event()}
 
+        self.leader = None
+        self.local_ip = socket.gethostbyname(socket.getfqdn())
+        self.is_running = False
         self.logger = logging.getLogger('mmp')
         self.logger.setLevel(logging.INFO)
         fh = logging.FileHandler('../mmp.log')
