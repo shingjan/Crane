@@ -35,9 +35,9 @@ for i in range(len(hostname)):
         if session.exit_status_ready():
             break
 
-    print('exit status: ', session.recv_exit_status())
-    print(stdout_data)
-    print(stderr_data)
+    #print('exit status: ', session.recv_exit_status())
+    #print(stdout_data)
+    #print(stderr_data)
 
 
     session.close()
