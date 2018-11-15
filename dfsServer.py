@@ -6,6 +6,7 @@ import pickle as pk
 import threading
 import select
 import glob
+from mmpServer import MmpServer
 #from shutil import copy
 
 
@@ -776,7 +777,9 @@ class DfsServer:
 
 
 if __name__ == '__main__':
-    dfsServer = DfsServer()
+    membership_list = []
+    mmpServer = MmpServer(membership_list)
+    dfsServer = DfsServer(membership_list)
     if dfsServer.start_join():
         dfsServer.run()
         dfsServer.terminate()
