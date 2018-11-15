@@ -780,10 +780,12 @@ if __name__ == '__main__':
     membership_list = []
     mmpServer = MmpServer(membership_list)
     dfsServer = DfsServer(membership_list)
-    if dfsServer.start_join():
+    if mmpServer.start_join():
+        mmpServer.run()
         dfsServer.run()
+        mmpServer.terminate()
         dfsServer.terminate()
     else:
-        print("DFS server not properly configured. Exit")
+        print("mmp server not properly configured. Exit")
 
 
