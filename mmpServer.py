@@ -5,7 +5,7 @@ import logging
 import pickle as pk
 import threading
 import select
-from envir import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST
+from env import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST, MMP_SOCKET_LIST
 #import glob
 
 class MmpServer:
@@ -17,12 +17,8 @@ class MmpServer:
         self.mmp_socket_list = []
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
-        for i in range(self.mmp_sockets):
-            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            temp.bind(('0.0.0.0', 9000 + i))
-            temp.settimeout(2)
-            self.mmp_socket_list.append(temp)
 
+        self.mmp_socket_list = MMP_SOCKET_LIST
         self.mmp_socket_dict = MMP_SOCKET_DICT
         self.lock_list = LOCK_LIST
 
