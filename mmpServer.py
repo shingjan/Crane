@@ -162,22 +162,22 @@ class MmpServer:
                 self._multicast('join', msg['data'], [i[0] for i in self.membership_list if i[0] != self.leader],
                                 9000 + self.mmp_socket_dict['join'][1], True)
                 time.sleep(1)
-                for f in self.file_dict.keys():
-                    self._start_repair_file(f, msg['data'][0], 'join')
+                #for f in self.file_dict.keys():
+                #    self._start_repair_file(f, msg['data'][0], 'join')
             else:
                 self.membership_list.append(msg['data'])
                 self.membership_list.sort(key=lambda i: self.ip_list[i[0]])
             self.logger.info(msg['data'][0] + " is added to the group")
             self._update_neighbors()
             self._elect()
-            if self.local_ip == self.leader:
-                #self._build_file_dict()
-                all_affected_files = []
-                for f in self.file_dict.keys():
-                    all_affected_files.append(f)
-                for f in all_affected_files:
-                    new_pri = self._hash(f)
-                    self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
+            #if self.local_ip == self.leader:
+            #    #self._build_file_dict()
+            #    all_affected_files = []
+            #    for f in self.file_dict.keys():
+            #        all_affected_files.append(f)
+            #    for f in all_affected_files:
+            #        new_pri = self._hash(f)
+            #        self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
 
     def decommission_request(self, msg):
         if self._if_in_mmp(msg['data'][0]):
@@ -189,15 +189,15 @@ class MmpServer:
         if not self._if_in_mmp(self.leader):
             self._elect()
 
-        if self.leader == self.local_ip:
-            self._start_repair_ip(msg['data'][0])
-            # TODO no build
-            all_affected_files = []
-            for f in self.file_dict.keys():
-                all_affected_files.append(f)
-            for f in all_affected_files:
-                new_pri = self._hash(f)
-                self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
+        #if self.leader == self.local_ip:
+        #    self._start_repair_ip(msg['data'][0])
+        #    # TODO no build
+        #    all_affected_files = []
+        #    for f in self.file_dict.keys():
+        #        all_affected_files.append(f)
+        #    for f in all_affected_files:
+        #        new_pri = self._hash(f)
+        #        self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
 
     def quit_request(self, left_ip):
         member_hosts = [member[0] for member in self.membership_list]
