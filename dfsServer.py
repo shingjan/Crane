@@ -7,8 +7,7 @@ import threading
 import select
 import glob
 from mmpServer import MmpServer
-#from shutil import copy
-from envir import *
+from envir import IP_LIST, LOCK_LIST, INDEX_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_LIST, MMP_SOCKET_DICT, SERVER_TCP_PORT, TCP_PORT, NUM_TCP_SOCKETS, DFS_SOCKET_LIST, DFS_SOCKET_DICT
 
 # TODO: build, delete file
 class DfsServer:

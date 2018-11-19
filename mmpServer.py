@@ -5,7 +5,7 @@ import logging
 import pickle as pk
 import threading
 import select
-from envir import *
+from envir import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST
 #import glob
 
 class MmpServer:
