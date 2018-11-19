@@ -37,6 +37,7 @@ class MmpServer:
     def run(self):
         self.mmp_receiver.start()
         self.mmp_sender.start()
+        self.mmp_cmd.start()
 
     def terminate(self):
         self.mmp_receiver.join()
