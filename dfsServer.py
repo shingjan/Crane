@@ -399,7 +399,9 @@ class DfsServer:
         files = []
         for f in self.file_dict.keys():
             if ip in self.file_dict[f]:
+                self.file_dict[f] = [i for i in self.file_dict[f] if i!=ip]
                 files.append(f)
+
         files = list(set(files))
         for f in files:
             self._start_repair_file(f, ip)
@@ -416,7 +418,7 @@ class DfsServer:
 
         ori_primary_node = self._hash(sdfs_name, ori_hosts)
         ori_nb = self._get_neighbors(ori_primary_node, ori_hosts)
-        ls = [ori_primary_node]+ori_nb
+        ls = [ori_primary_node] + ori_nb
         self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
 
     def _repair(self, sdfs_name, ls):

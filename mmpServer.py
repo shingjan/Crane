@@ -1,11 +1,11 @@
 import time
 import socket
 import logging
-import os
+#import os
 import pickle as pk
 import threading
 import select
-import glob
+#import glob
 
 class MmpServer:
     def __init__(self, mmp_list):
@@ -237,7 +237,7 @@ class MmpServer:
         if left_ip in member_hosts:
             idx = member_hosts.index(left_ip)
             self.membership_list.pop(idx)
-            self.membership_list.sort(key=lambda i:self.ip_list[i[0]])
+            #self.membership_list.sort(key=lambda i:self.ip_list[i[0]])
             self.logger.info(left_ip + " is detected left the group")
         self._multicast('decommission', (left_ip, time.time()),
                         [i[0] for i in self.membership_list if i[0] != self.local_ip],
@@ -246,15 +246,15 @@ class MmpServer:
         if not self._if_in_mmp(self.leader):
             self._elect()
 
-        if self.local_ip == self.leader:
-            self._start_repair_ip(left_ip)
-            # TODO build
-            all_affected_files = []
-            for f in self.file_dict.keys():
-                all_affected_files.append(f)
-            for f in all_affected_files:
-                new_pri = self._hash(f)
-                self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
+#        if self.local_ip == self.leader:
+#            self._start_repair_ip(left_ip)
+#            # TODO build
+#            all_affected_files = []
+#            for f in self.file_dict.keys():
+#                all_affected_files.append(f)
+#            for f in all_affected_files:
+#                new_pri = self._hash(f)
+#                self.file_dict[f] = [new_pri] + self._get_neighbors(new_pri)
 
     def mmp_sender_thread(self):
         self._update_neighbors()
@@ -317,3 +317,7 @@ class MmpServer:
             self._build_file_dict()
             # TODO build file dict
 
+if __name__ == '__main__':
+    mainServer = MmpServer()
+    mainServer.run()
+    mainServer.terminate()
