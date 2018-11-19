@@ -2,35 +2,25 @@ import socket
 import pickle as pk
 import time
 import os
-
+from envir import IP_LIST, TCP_PORT, SERVER_TCP_PORT, UDP_SOCKET, UDP_LS_SOCKET, UDP_RECV_SOCKET, UDP_REQ_SOCKET
 
 class DfsClient:
     def __init__(self):
-        self.ip_list = {
-            "172.22.158.208": 1,
-            "172.22.154.209": 2,
-            "172.22.156.209": 3,
-            "172.22.158.209": 4,
-            "172.22.154.210": 5,
-            "172.22.156.210": 6,
-            "172.22.158.210": 7,
-            "172.22.154.211": 8,
-            "172.22.156.211": 9,
-            "172.22.158.211": 10}
+        self.ip_list = IP_LIST
         self.local_ip = socket.gethostbyname(socket.getfqdn())
-        self.tcp_port = 6666
-        self.server_tcp_port = 8888
+        self.tcp_port = TCP_PORT
+        self.server_tcp_port = SERVER_TCP_PORT
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_socket.bind(('0.0.0.0', 9200))
+        self.udp_socket.bind(('0.0.0.0', UDP_SOCKET))
         self.udp_socket.settimeout(2)
         self.udp_ls_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_ls_socket.bind(('0.0.0.0', 9203))
+        self.udp_ls_socket.bind(('0.0.0.0', UDP_LS_SOCKET))
         self.udp_ls_socket.settimeout(2)
         self.udp_recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_recv_socket.bind(('0.0.0.0', 9208))
+        self.udp_recv_socket.bind(('0.0.0.0', UDP_RECV_SOCKET))
         self.udp_recv_socket.settimeout(2)
         self.udp_req_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_req_socket.bind(('0.0.0.0', 9205))
+        self.udp_req_socket.bind(('0.0.0.0', UDP_REQ_SOCKET))
         self.udp_req_socket.settimeout(2)
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
@@ -78,7 +68,7 @@ class DfsClient:
             try:
                 skt.connect((ip, port))
                 connected = True
-            except Exception as e:
+            except:
                 pass
         while True:
             chunk = target.read(1024)

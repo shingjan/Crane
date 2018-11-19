@@ -5,24 +5,15 @@ import logging
 import pickle as pk
 import threading
 import select
+from envir import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST
 #import glob
 
 class MmpServer:
     def __init__(self, mmp_list):
         self.membership_list = []
         self.neighbors = []
-        self.ip_list = {
-            "172.22.158.208": 1,
-            "172.22.154.209": 2,
-            "172.22.156.209": 3,
-            "172.22.158.209": 4,
-            "172.22.154.210": 5,
-            "172.22.156.210": 6,
-            "172.22.158.210": 7,
-            "172.22.154.211": 8,
-            "172.22.156.211": 9,
-            "172.22.158.211": 10}
-        self.mmp_sockets = 9
+        self.ip_list = IP_LIST
+        self.mmp_sockets = NUM_MMP_SOCKETS
         self.mmp_socket_list = []
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
@@ -32,28 +23,8 @@ class MmpServer:
             temp.settimeout(2)
             self.mmp_socket_list.append(temp)
 
-        self.mmp_socket_dict = {
-            'send': (self.mmp_socket_list[0], 0),
-            'ack': (self.mmp_socket_list[1], 1),
-            'decommission': (self.mmp_socket_list[2], 2),
-            'join': (self.mmp_socket_list[3], 3),
-            'mmp': (self.mmp_socket_list[4], 4),
-            'elect': (self.mmp_socket_list[5], 5),
-            'leader': (self.mmp_socket_list[6], 6),
-            'ask': (self.mmp_socket_list[7], 7),
-            'info': (self.mmp_socket_list[8], 8),
-        }
-        self.lock_list = {
-            "172.22.158.208": threading.Event(),
-            "172.22.154.209": threading.Event(),
-            "172.22.156.209": threading.Event(),
-            "172.22.158.209": threading.Event(),
-            "172.22.154.210": threading.Event(),
-            "172.22.156.210": threading.Event(),
-            "172.22.158.210": threading.Event(),
-            "172.22.154.211": threading.Event(),
-            "172.22.156.211": threading.Event(),
-            "172.22.158.211": threading.Event()}
+        self.mmp_socket_dict = MMP_SOCKET_DICT
+        self.lock_list = LOCK_LIST
 
         self.leader = None
         self.local_ip = socket.gethostbyname(socket.getfqdn())
@@ -289,7 +260,6 @@ class MmpServer:
             except socket.timeout:
                 continue
 
-
     def exec_mmp_message(self, message, address):
         if message['cmd'] == 'send':
             self._unicast('ack', 'ack from: ' + self.local_ip, message['ip'], 9000 + self.mmp_socket_dict['ack'][1], True)
@@ -314,10 +284,11 @@ class MmpServer:
         elif message['cmd'] == 'leader':
             self.leader = message['ip']
             self._update_neighbors()
-            self._build_file_dict()
+            #self._build_file_dict()
             # TODO build file dict
 
 if __name__ == '__main__':
     mainServer = MmpServer()
     mainServer.run()
     mainServer.terminate()
+
