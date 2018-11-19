@@ -8,7 +8,7 @@ import select
 import glob
 from mmpServer import MmpServer
 #from shutil import copy
-
+from envir import *
 
 # TODO: build, delete file
 class DfsServer:
@@ -18,59 +18,14 @@ class DfsServer:
         # ----------------------------
         self.membership_list = []
         self.neighbors = []
-        self.ip_list = {
-            "172.22.158.208": 1,
-            "172.22.154.209": 2,
-            "172.22.156.209": 3,
-            "172.22.158.209": 4,
-            "172.22.154.210": 5,
-            "172.22.156.210": 6,
-            "172.22.158.210": 7,
-            "172.22.154.211": 8,
-            "172.22.156.211": 9,
-            "172.22.158.211": 10}
-        self.lock_list = {
-            "172.22.158.208": threading.Event(),
-            "172.22.154.209": threading.Event(),
-            "172.22.156.209": threading.Event(),
-            "172.22.158.209": threading.Event(),
-            "172.22.154.210": threading.Event(),
-            "172.22.156.210": threading.Event(),
-            "172.22.158.210": threading.Event(),
-            "172.22.154.211": threading.Event(),
-            "172.22.156.211": threading.Event(),
-            "172.22.158.211": threading.Event()}
-        self.index_list = {
-                1: "172.22.158.208",
-                2: "172.22.154.209",
-                3: "172.22.156.209",
-                4: "172.22.158.209",
-                5: "172.22.154.210",
-                6: "172.22.156.210",
-                7: "172.22.158.210",
-                8: "172.22.154.211",
-                9: "172.22.156.211",
-                10: "172.22.158.211"}
+        self.ip_list = IP_LIST
+        self.lock_list = LOCK_LIST
+        self.index_list = INDEX_LIST
 
-        self.mmp_sockets = 9
-        self.mmp_socket_list = []
-        for i in range(self.mmp_sockets):
-            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            temp.bind(('0.0.0.0', 9000 + i))
-            temp.settimeout(2)
-            self.mmp_socket_list.append(temp)
+        self.mmp_sockets = NUM_MMP_SOCKETS
+        self.mmp_socket_list = MMP_SOCKET_LIST
+        self.mmp_socket_dict = MMP_SOCKET_DICT
 
-        self.mmp_socket_dict = {
-            'send': (self.mmp_socket_list[0], 0),
-            'ack': (self.mmp_socket_list[1], 1),
-            'decommission': (self.mmp_socket_list[2], 2),
-            'join': (self.mmp_socket_list[3], 3),
-            'mmp': (self.mmp_socket_list[4], 4),
-            'elect': (self.mmp_socket_list[5], 5),
-            'leader': (self.mmp_socket_list[6], 6),
-            'ask': (self.mmp_socket_list[7], 7),
-            'info': (self.mmp_socket_list[8], 8),
-        }
         self.leader = None
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.is_running = False
@@ -104,33 +59,14 @@ class DfsServer:
         self.tmp_file_dir = "../tmp/"
         self.delimiter = "-"
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp_port = 8888
-        self.client_tcp_port = 6666
+        self.tcp_port = SERVER_TCP_PORT
+        self.client_tcp_port = TCP_PORT
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
         self.tcp_socket.settimeout(2)
         self.tcp_socket.listen(10)
-        self.dfs_sockets = 12
-        self.dfs_socket_list = []
-        self.dfs_socket_dict = {}
-        for i in range(self.dfs_sockets):
-            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            temp.bind(('0.0.0.0', 9100 + i))
-            temp.settimeout(2)
-            self.dfs_socket_list.append(temp)
-        self.dfs_socket_dict = {
-            'get': (self.dfs_socket_list[0], 0),
-            'put': (self.dfs_socket_list[1], 1),
-            'del': (self.dfs_socket_list[2], 2),
-            'ls': (self.dfs_socket_list[3], 3),
-            'getv': (self.dfs_socket_list[4], 4),
-            'req': (self.dfs_socket_list[5], 5),
-            'repair': (self.dfs_socket_list[6], 6),
-            'dict': (self.dfs_socket_list[7], 7),
-            'recv': (self.dfs_socket_list[8], 8),
-            'ask_dict': (self.dfs_socket_list[9], 9),
-            'del_file': (self.dfs_socket_list[10], 10),
-            'get_all': (self.dfs_socket_list[11], 11)
-        }
+        self.dfs_sockets = NUM_TCP_SOCKETS
+        self.dfs_socket_list = DFS_SOCKET_LIST
+        self.dfs_socket_dict = DFS_SOCKET_DICT
     '''
     -----------------------------------------------------------------------
                               Mmp Helper functions
