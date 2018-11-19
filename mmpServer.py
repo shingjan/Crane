@@ -113,7 +113,6 @@ class MmpServer:
     -----------------------------------------------------------------------
     '''
     def start_join(self):
-        print('start mutli-cast')
         self._multicast('ask', "",
                         [i for i in self.ip_list.keys() if i != self.local_ip],
                         9000 + self.mmp_socket_dict['ask'][1], True)
