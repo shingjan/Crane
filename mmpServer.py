@@ -9,7 +9,7 @@ from env import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST, MMP_SOCKET
 #import glob
 
 class MmpServer:
-    def __init__(self, mmp_list):
+    def __init__(self):
         self.membership_list = []
         self.neighbors = []
         self.ip_list = IP_LIST
@@ -276,15 +276,16 @@ class MmpServer:
                 self.leader = self.local_ip
                 member_hosts = [i[0] for i in self.membership_list if i != self.local_ip]
                 self._multicast('leader', '', member_hosts, 9000 + self.mmp_socket_dict['leader'][1], True)
-                self._multicast('ask_dict', '', member_hosts, 9100 + self.dfs_socket_dict['ask_dict'][1], False)
         elif message['cmd'] == 'leader':
             self.leader = message['ip']
             self._update_neighbors()
             #self._build_file_dict()
             # TODO build file dict
 
+
 if __name__ == '__main__':
-    mainServer = MmpServer()
-    mainServer.run()
-    mainServer.terminate()
+    mmpServer = MmpServer()
+    if mmpServer.start_join():
+        mmpServer.run()
+        mmpServer.terminate()
 
