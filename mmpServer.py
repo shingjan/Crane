@@ -1,7 +1,7 @@
 import time
 import socket
 import logging
-#import os
+import os
 import pickle as pk
 import threading
 import select
@@ -17,6 +17,7 @@ class MmpServer:
         self.mmp_socket_list = []
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
+        self.mmp_cmd = threading.Thread(target=self.mmp_cmd_thread)
 
         self.mmp_socket_list = MMP_SOCKET_LIST
         self.mmp_socket_dict = MMP_SOCKET_DICT
@@ -40,16 +41,12 @@ class MmpServer:
     def terminate(self):
         self.mmp_receiver.join()
         self.mmp_sender.join()
-        self.dfs_receiver.join()
-        self.cmd.join()
+        self.mmp_cmd.join()
 
     def _unicast(self, cmd, msg, ip, port, flag):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         skt.settimeout(2)
-        if flag:
-            sender_port = 9000 + self.mmp_socket_dict[cmd][1]
-        else:
-            sender_port = 9100 + self.dfs_socket_dict[cmd][1]
+        sender_port = 9000 + self.mmp_socket_dict[cmd][1]
         packet = pk.dumps({
             'cmd': cmd,
             'data': msg,
@@ -64,10 +61,7 @@ class MmpServer:
     def _multicast(self, cmd, msg, target_list, port, flag):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         skt.settimeout(2)
-        if flag:
-            sender_port = 9000 + self.mmp_socket_dict[cmd][1]
-        else:
-            sender_port = 9100 + self.dfs_socket_dict[cmd][1]
+        sender_port = 9000 + self.mmp_socket_dict[cmd][1]
         packet = pk.dumps({
             'cmd': cmd,
             'data': msg,
@@ -79,6 +73,10 @@ class MmpServer:
             #print(cmd, " send to", i, " via port ", port)
             skt.sendto(packet, (i, port))
         skt.close()
+
+    def _if_in_mmp(self, ip):
+        member_hosts = [i[0] for i in self.membership_list]
+        return ip in member_hosts
 
     def _elect(self):
         m = 10
@@ -114,7 +112,6 @@ class MmpServer:
     -----------------------------------------------------------------------
     '''
     def start_join(self):
-        self._reset()
         self._multicast('ask', "",
                         [i for i in self.ip_list.keys() if i != self.local_ip],
                         9000 + self.mmp_socket_dict['ask'][1], True)
@@ -148,7 +145,6 @@ class MmpServer:
         self.neighbors = []
         self.leader = None
         self.is_running = False
-        self._reset()
 
     def join_request(self, msg):
         if not self._if_in_mmp(msg['data'][0]):
@@ -255,6 +251,31 @@ class MmpServer:
                         self.exec_mmp_message(message, address)
             except socket.timeout:
                 continue
+
+    def mmp_cmd_thread(self):
+        while True:
+            cmd = input('Available cmds: ls, self, join, dec, store, ld and exit. Enter: ')
+            if cmd == 'join':
+                if not self.start_join():
+                    print("Rejoin failed. Try rejoin again:")
+            elif cmd == 'dec':
+                self.decommission()
+            elif cmd == 'ls':
+                print("Members: ")
+                for m in self.membership_list:
+                    print(m)
+                print("neighbors: ")
+                for n in self.neighbors:
+                    print(n)
+            elif cmd == 'self':
+                print(self.local_ip)
+            elif cmd == 'ld':
+                print(self.leader)
+            elif cmd == 'exit':
+                os._exit(0)
+
+            else:
+                print("Invalid cmd, enter again:")
 
     def exec_mmp_message(self, message, address):
         if message['cmd'] == 'send':
