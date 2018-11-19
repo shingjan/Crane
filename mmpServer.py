@@ -113,6 +113,7 @@ class MmpServer:
     -----------------------------------------------------------------------
     '''
     def start_join(self):
+        print('start mutli-cast')
         self._multicast('ask', "",
                         [i for i in self.ip_list.keys() if i != self.local_ip],
                         9000 + self.mmp_socket_dict['ask'][1], True)
@@ -255,7 +256,7 @@ class MmpServer:
 
     def mmp_cmd_thread(self):
         while True:
-            cmd = input('Available cmds: ls, self, join, dec, store, ld and exit. Enter: ')
+            cmd = input('Available cmds: ls, self, join, dec, ld and exit. Enter: ')
             if cmd == 'join':
                 if not self.start_join():
                     print("Rejoin failed. Try rejoin again:")
@@ -274,7 +275,6 @@ class MmpServer:
                 print(self.leader)
             elif cmd == 'exit':
                 os._exit(0)
-
             else:
                 print("Invalid cmd, enter again:")
 
@@ -310,4 +310,5 @@ if __name__ == '__main__':
     if mmpServer.start_join():
         mmpServer.run()
         mmpServer.terminate()
-
+    else:
+        print("mmp server not properly configured. Exit")
