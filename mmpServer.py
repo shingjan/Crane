@@ -5,8 +5,9 @@ import os
 import pickle as pk
 import threading
 import select
-from env import IP_LIST, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST, MMP_SOCKET_LIST
+from env import IP_LIST, MMP_TCP_PORT, DFS_TCP_PORT, CLIENT_TCP_PORT, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST, MMP_SOCKET_LIST
 #import glob
+
 
 class MmpServer:
     def __init__(self):
@@ -17,16 +18,23 @@ class MmpServer:
         self.mmp_socket_list = []
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
-        self.mmp_tcp_receiver = threading.Thread(target=)
+        self.mmp_tcp_receiver = threading.Thread(target=self.mmp_tcp_receiver_thread)
         self.mmp_cmd = threading.Thread(target=self.mmp_cmd_thread)
 
         self.mmp_socket_list = MMP_SOCKET_LIST
         self.mmp_socket_dict = MMP_SOCKET_DICT
         self.lock_list = LOCK_LIST
+        self.tcp_port = MMP_TCP_PORT
+        self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
+        self.tcp_socket.listen(10)
 
         self.leader = None
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.is_running = False
+        # -----------
+        # Logger Info
+        # -----------
         self.logger = logging.getLogger('mmp')
         self.logger.setLevel(logging.INFO)
         fh = logging.FileHandler('../mmp.log')
@@ -38,12 +46,12 @@ class MmpServer:
     def run(self):
         self.mmp_receiver.start()
         self.mmp_sender.start()
-        #self.mmp_cmd.start()
+        self.mmp_cmd.start()
 
     def terminate(self):
         self.mmp_receiver.join()
         self.mmp_sender.join()
-        #self.mmp_cmd.join()
+        self.mmp_cmd.join()
 
     def _unicast(self, cmd, msg, ip, port, flag):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -56,7 +64,6 @@ class MmpServer:
             'sender_port': sender_port,
             'sender_timestamp': time.time()
         })
-        #print(cmd, " send to", ip, " via port ", port)
         skt.sendto(packet, (ip, port))
         skt.close()
 
@@ -72,7 +79,6 @@ class MmpServer:
             'sender_timestamp': time.time()
         })
         for i in target_list:
-            #print(cmd, " send to", i, " via port ", port)
             skt.sendto(packet, (i, port))
         skt.close()
 
@@ -254,6 +260,21 @@ class MmpServer:
             except socket.timeout:
                 continue
 
+    def mmp_tcp_receiver_thread(self):
+        while True:
+            try:
+                conn, addr = self.tcp_socket.accept()
+                print('Connection addr:', addr)
+                while True:
+                    data = conn.recv(1024)
+                    if not data:
+                        break
+                    print(data)
+                conn.close()
+            except socket.timeout:
+                continue
+
+
     def mmp_cmd_thread(self):
         while True:
             cmd = input('Available cmds: ls, self, join, dec, ld and exit. Enter: ')
@@ -303,11 +324,13 @@ class MmpServer:
             self._update_neighbors()
             #self._build_file_dict()
             # TODO build file dict
+
     '''
     -----------------------------------------------------------------------
                                 Main Function
     -----------------------------------------------------------------------
     '''
+
 
 if __name__ == '__main__':
     mmpServer = MmpServer()

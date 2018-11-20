@@ -7,7 +7,7 @@ import threading
 import select
 import glob
 from mmpServer import MmpServer
-from env import IP_LIST, INDEX_LIST, SERVER_TCP_PORT, TCP_PORT, NUM_TCP_SOCKETS, DFS_SOCKET_LIST, DFS_SOCKET_DICT
+from env import IP_LIST, INDEX_LIST, DFS_TCP_PORT, CLIENT_TCP_PORT, MMP_TCP_PORT, NUM_TCP_SOCKETS, DFS_SOCKET_LIST, DFS_SOCKET_DICT
 
 
 # TODO: build, delete file
@@ -52,14 +52,15 @@ class DfsServer:
         self.tmp_file_dir = "../tmp/"
         self.delimiter = "-"
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp_port = SERVER_TCP_PORT
-        self.client_tcp_port = TCP_PORT
+        self.tcp_port = DFS_TCP_PORT
+        self.client_tcp_port = CLIENT_TCP_PORT
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
         self.tcp_socket.settimeout(2)
         self.tcp_socket.listen(10)
         self.dfs_sockets = NUM_TCP_SOCKETS
         self.dfs_socket_list = DFS_SOCKET_LIST
         self.dfs_socket_dict = DFS_SOCKET_DICT
+        self.mmp_tcp_port = MMP_TCP_PORT
     '''
     -----------------------------------------------------------------------
                               Mmp Helper functions
@@ -104,7 +105,20 @@ class DfsServer:
             skt.sendto(packet, (i, port))
         skt.close()
 
-    def
+    def _start(self):
+        skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        skt.settimeout(2)
+        connected = False
+        while not connected:
+            try:
+                skt.connect(('0.0.0.0', self.mmp_tcp_port))
+                connected = True
+            except socket.timeout:
+                pass
+        skt.sendall('mmp')
+        skt.close()
+
+
 
     '''
     -----------------------------------------------------------------------
@@ -237,7 +251,7 @@ class DfsServer:
 
         for ip in self.neighbors:
             self._unicast('recv', sdfs_name, ip, 9100 + self.dfs_socket_dict['recv'][1], False)
-            self._send_file_to(lastest_file, ip, self.tcp_port)
+            #self._send_file_to(lastest_file, ip, self.tcp_port)
 
     def _get_all_versions(self, sdfs_name):
         prefix = self.file_dir+sdfs_name+'*'
@@ -373,10 +387,12 @@ class DfsServer:
         while True:
             cmd = input('Available cmds: ls, self, join, dec, store, ld and exit. Enter: ')
             if cmd == 'join':
-                if not self.start_join():
-                    print("Rejoin failed. Try rejoin again:")
+                pass
+                #if not self.start_join():
+                #    print("Rejoin failed. Try rejoin again:")
             elif cmd == 'dec':
-                self.decommission()
+                pass
+                #self.decommission()
             elif cmd == 'ls':
                 print("Members: ")
                 for m in self.membership_list:
@@ -488,11 +504,11 @@ class DfsServer:
 if __name__ == '__main__':
     #mmpServer = MmpServer()
     dfsServer = DfsServer()
-    #if mmpServer.start_join():
-    #    mmpServer.run()
-    dfsServer.run()
-    #    mmpServer.terminate()
-    dfsServer.terminate()
+    if dfsServer._start():
+        dfsServer.run()
+        dfsServer.terminate()
+    else:
+        print("dfsServer not configured properly. Abort!")
 
 
 

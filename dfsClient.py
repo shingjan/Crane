@@ -2,14 +2,15 @@ import socket
 import pickle as pk
 import time
 import os
-from env import IP_LIST, TCP_PORT, SERVER_TCP_PORT, UDP_SOCKET, UDP_LS_SOCKET, UDP_RECV_SOCKET, UDP_REQ_SOCKET
+from env import IP_LIST, CLIENT_TCP_PORT, DFS_TCP_PORT, UDP_SOCKET, UDP_LS_SOCKET, UDP_RECV_SOCKET, UDP_REQ_SOCKET
+
 
 class DfsClient:
     def __init__(self):
         self.ip_list = IP_LIST
         self.local_ip = socket.gethostbyname(socket.getfqdn())
-        self.tcp_port = TCP_PORT
-        self.server_tcp_port = SERVER_TCP_PORT
+        self.tcp_port = CLIENT_TCP_PORT
+        self.server_tcp_port = DFS_TCP_PORT
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udp_socket.bind(('0.0.0.0', UDP_SOCKET))
         self.udp_socket.settimeout(2)
@@ -170,6 +171,7 @@ class DfsClient:
         else:
             print("Invalid cmd or params, enter again:")
         print("Time usage: ", time.time() - start)
+
 
 if __name__ == '__main__':
     dfsClient = DfsClient()
