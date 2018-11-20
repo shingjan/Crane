@@ -140,10 +140,13 @@ class DfsServer:
         skt.sendall(msg)
         chunks = []
         while True:
-            data = skt.recv(1024)
-            if not data:
-                break
-            chunks.append(data)
+            try:
+                data = skt.recv(1024)
+                if not data:
+                    break
+                chunks.append(data)
+            except socket.timeout:
+                pass
         print(pk.loads(b''.join(chunks)))
         skt.close()
         return False
