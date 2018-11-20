@@ -299,11 +299,14 @@ class MmpServer:
                     if not data:
                         break
                     print(pk.loads(data))
+                print(self.membership_list)
                 mmp = pk.dumps(self.membership_list)
                 total_len = len(mmp)
+                print(total_len)
                 total_sent = 0
                 while total_sent < total_len:
                     sent = conn.send(mmp[total_sent:])
+                    print(sent)
                     if sent == 0:
                         raise RuntimeError("socket connection broken")
                     total_sent = total_sent + sent
