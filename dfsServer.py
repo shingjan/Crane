@@ -6,7 +6,7 @@ import pickle as pk
 import threading
 import select
 import glob
-from mmpServer import MmpServer
+#from mmpServer import MmpServer
 from env import IP_LIST, INDEX_LIST, SERVER_TCP_PORT, TCP_PORT, NUM_TCP_SOCKETS, DFS_SOCKET_LIST, DFS_SOCKET_DICT
 
 
@@ -104,7 +104,6 @@ class DfsServer:
             skt.sendto(packet, (i, port))
         skt.close()
 
-    def
 
     '''
     -----------------------------------------------------------------------
@@ -126,8 +125,13 @@ class DfsServer:
         self.file_dict = {}
 
     def _get_neighbors(self, ip, ls = None):
+        """
+        return the nbs of a given ip
+        default of ls: current mmp list
+        """
         if not ls:
             ls = [i[0] for i in self.membership_list]
+            ls.sort(key=lambda i: self.ip_list[i])
 
         length = len(ls)
         neighbors = []
@@ -149,7 +153,8 @@ class DfsServer:
 
     def _hash(self, filename, ls=None):
         """
-        Hash sdfsfilename, determine the primary node
+        return: primary node base on the mmp list input.
+        default: current primary node
         """
         if not ls:
             ls = [i[0] for i in self.membership_list]
@@ -157,32 +162,35 @@ class DfsServer:
         s = 0
         for i in filename:
             s += ord(i)
-        s = 1+s % 10
+        s = 1 + (s % 10)
+
         """
         k + len(self.membership_list)%10 = s + 1
         """
         n = len(ls)
-        candidates = [s-n-10, s-n]
-        ls.sort(key=lambda i: self.ip_list[i])
+        candidates = [s-n-10, s-n, s-n+10]
         for k in candidates:
             if k >= -n and k < n:
-                print(k)
                 return ls[k]
 
-    def _start_repair_file(self, sdfs_name, ip, msg='dec'):
-        primary_node = self._hash(sdfs_name)
-        member_hosts = [i[0] for i in self.membership_list]
-        if msg == 'join':
-            ori_hosts = [i for i in member_hosts if i!=ip]
-        else:
-            member_hosts.append(ip)
-            ori_hosts = member_hosts
-            ori_hosts.sort(key=lambda i: self.ip_list[i])
+    def _start_repair_file(self, sdfs_name, ip, ori_ls):
+        """
+        in leader
+        p: primary node
+        op: the last primary node
+        ls: current mmp list
+        ori_ls: mmp list before change
+        """
+        p = self._hash(sdfs_name)
+        nb = self._get_neighbors(sdfs_name)
+        should_in = [p] + nb
 
-        ori_primary_node = self._hash(sdfs_name, ori_hosts)
+
+        op = self._hash(sdfs_name, ori_ls)
         ori_nb = self._get_neighbors(ori_primary_node, ori_hosts)
         ls = [ori_primary_node] + ori_nb
-        self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
+        send_file()
+        #self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
 
     def _repair(self, sdfs_name, ls):
         '''
@@ -192,8 +200,8 @@ class DfsServer:
         3. check del
         4. check send
         ls:  original membership list
+        # send_file(sender, receiver, filename)
         '''
-
         print("Repair started! File will be stored in me", self.local_ip, "and", self.neighbors)
         fnames = self.file_dir + sdfs_name + '*'
         files = glob.glob(fnames)
