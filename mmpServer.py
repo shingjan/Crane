@@ -307,7 +307,7 @@ class MmpServer:
                     if sent == 0:
                         raise RuntimeError("socket connection broken")
                     total_sent = total_sent + sent
-                conn.sendall(mmp)
+                    conn.sendall(mmp)
                 conn.close()
             except socket.timeout:
                 continue
