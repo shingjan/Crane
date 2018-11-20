@@ -303,7 +303,7 @@ class MmpServer:
                 total_len = len(mmp)
                 total_sent = 0
                 while total_sent < total_len:
-                    sent = self.tcp_socket.send(mmp[total_sent:])
+                    sent = conn.send(mmp[total_sent:])
                     if sent == 0:
                         raise RuntimeError("socket connection broken")
                     total_sent = total_sent + sent
