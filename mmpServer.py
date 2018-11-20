@@ -289,6 +289,7 @@ class MmpServer:
 
     def mmp_tcp_receiver_thread(self):
         while True:
+            print('aaa')
             try:
                 conn, addr = self.tcp_socket.accept()
                 print('Connection addr:', addr)
