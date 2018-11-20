@@ -135,9 +135,9 @@ class DfsServer:
                 connected = True
             except socket.timeout:
                 pass
-        skt.sendall('mmp')
+        msg = pk.dumps('mmp')
+        skt.sendall(msg)
         skt.close()
-
 
 
     '''

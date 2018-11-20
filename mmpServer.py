@@ -296,7 +296,7 @@ class MmpServer:
                     data = conn.recv(1024)
                     if not data:
                         break
-                    print(data)
+                    print(pk.loads(data))
                 conn.close()
             except socket.timeout:
                 continue
