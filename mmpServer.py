@@ -5,7 +5,7 @@ import os
 import pickle as pk
 import threading
 import select
-from env import IP_LIST, MMP_TCP_PORT, DFS_TCP_PORT, CLIENT_TCP_PORT, NUM_MMP_SOCKETS, MMP_SOCKET_DICT, LOCK_LIST, MMP_SOCKET_LIST
+from env import IP_LIST, MMP_TCP_PORT, DFS_TCP_PORT, CLIENT_TCP_PORT
 #import glob
 
 
@@ -14,16 +14,43 @@ class MmpServer:
         self.membership_list = []
         self.neighbors = []
         self.ip_list = IP_LIST
-        self.mmp_sockets = NUM_MMP_SOCKETS
-        self.mmp_socket_list = []
+
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
         self.mmp_tcp_receiver = threading.Thread(target=self.mmp_tcp_receiver_thread)
         self.mmp_cmd = threading.Thread(target=self.mmp_cmd_thread)
 
-        self.mmp_socket_list = MMP_SOCKET_LIST
-        self.mmp_socket_dict = MMP_SOCKET_DICT
-        self.lock_list = LOCK_LIST
+        num_mmp_socket = 9
+        self.mmp_socket_list = []
+        for i in range(num_mmp_socket):
+            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            temp.bind(('0.0.0.0', 9000 + i))
+            temp.settimeout(2)
+            self.mmp_socket_list.append(temp)
+
+        self.mmp_socket_dict = {
+            'send': (self.mmp_socket_list[0], 0),
+            'ack': (self.mmp_socket_list[1], 1),
+            'decommission': (self.mmp_socket_list[2], 2),
+            'join': (self.mmp_socket_list[3], 3),
+            'mmp': (self.mmp_socket_list[4], 4),
+            'elect': (self.mmp_socket_list[5], 5),
+            'leader': (self.mmp_socket_list[6], 6),
+            'ask': (self.mmp_socket_list[7], 7),
+            'info': (self.mmp_socket_list[8], 8)}
+
+        self.lock_list = {
+            "172.22.158.208": threading.Event(),
+            "172.22.154.209": threading.Event(),
+            "172.22.156.209": threading.Event(),
+            "172.22.158.209": threading.Event(),
+            "172.22.154.210": threading.Event(),
+            "172.22.156.210": threading.Event(),
+            "172.22.158.210": threading.Event(),
+            "172.22.154.211": threading.Event(),
+            "172.22.156.211": threading.Event(),
+            "172.22.158.211": threading.Event()}
+
         self.tcp_port = MMP_TCP_PORT
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))

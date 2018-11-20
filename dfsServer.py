@@ -7,7 +7,7 @@ import threading
 import select
 import glob
 from mmpServer import MmpServer
-from env import IP_LIST, INDEX_LIST, DFS_TCP_PORT, CLIENT_TCP_PORT, MMP_TCP_PORT, NUM_TCP_SOCKETS, DFS_SOCKET_LIST, DFS_SOCKET_DICT
+from env import IP_LIST, INDEX_LIST, DFS_TCP_PORT, CLIENT_TCP_PORT, MMP_TCP_PORT
 
 
 # TODO: build, delete file
@@ -54,13 +54,33 @@ class DfsServer:
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_port = DFS_TCP_PORT
         self.client_tcp_port = CLIENT_TCP_PORT
+        self.mmp_tcp_port = MMP_TCP_PORT
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
         self.tcp_socket.settimeout(2)
         self.tcp_socket.listen(10)
-        self.dfs_sockets = NUM_TCP_SOCKETS
-        self.dfs_socket_list = DFS_SOCKET_LIST
-        self.dfs_socket_dict = DFS_SOCKET_DICT
-        self.mmp_tcp_port = MMP_TCP_PORT
+
+        num_udp_sockets = 12
+        self.dfs_socket_list = []
+        for i in range(num_udp_sockets):
+            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            temp.bind(('0.0.0.0', 9100 + i))
+            temp.settimeout(2)
+            self.dfs_socket_list.append(temp)
+
+        self.dfs_socket_dict = {
+            'get': (self.dfs_socket_list[0], 0),
+            'put': (self.dfs_socket_list[1], 1),
+            'del': (self.dfs_socket_list[2], 2),
+            'ls': (self.dfs_socket_list[3], 3),
+            'getv': (self.dfs_socket_list[4], 4),
+            'req': (self.dfs_socket_list[5], 5),
+            'repair': (self.dfs_socket_list[6], 6),
+            'dict': (self.dfs_socket_list[7], 7),
+            'recv': (self.dfs_socket_list[8], 8),
+            'ask_dict': (self.dfs_socket_list[9], 9),
+            'del_file': (self.dfs_socket_list[10], 10),
+            'get_all': (self.dfs_socket_list[11], 11)}
+
     '''
     -----------------------------------------------------------------------
                               Mmp Helper functions
