@@ -294,11 +294,8 @@ class MmpServer:
             try:
                 conn, addr = self.tcp_socket.accept()
                 print('Connection addr:', addr)
-                while True:
-                    data = conn.recv(1024)
-                    if not data:
-                        break
-                    print(pk.loads(data))
+                data = conn.recv(1024)
+                print(pk.loads(data))
                 print(self.membership_list)
                 mmp = pk.dumps(self.membership_list)
                 total_len = len(mmp)
