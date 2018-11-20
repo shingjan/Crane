@@ -169,21 +169,6 @@ class DfsServer:
                 print(k)
                 return ls[k]
 
-    def _start_repair_ip(self, ip):
-        """
-        Find all files supposed to be in a crashed node ip
-        Called by leader
-        """
-        files = []
-        for f in self.file_dict.keys():
-            if ip in self.file_dict[f]:
-                self.file_dict[f] = [i for i in self.file_dict[f] if i!=ip]
-                files.append(f)
-
-        files = list(set(files))
-        for f in files:
-            self._start_repair_file(f, ip)
-
     def _start_repair_file(self, sdfs_name, ip, msg='dec'):
         primary_node = self._hash(sdfs_name)
         member_hosts = [i[0] for i in self.membership_list]
@@ -200,12 +185,15 @@ class DfsServer:
         self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
 
     def _repair(self, sdfs_name, ls):
-        """
+        '''
         Re-replication while a node crashed, given sdfsfilename
-        1. ask and get file
-        2. del all others
-        3. send to NBs
-        """
+        1. check if file in primary node
+        2. get file if not in pri
+        3. check del
+        4. check send
+        ls:  original membership list
+        '''
+
         print("Repair started! File will be stored in me", self.local_ip, "and", self.neighbors)
         fnames = self.file_dir + sdfs_name + '*'
         files = glob.glob(fnames)

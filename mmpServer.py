@@ -265,7 +265,7 @@ class MmpServer:
             elif cmd == 'ls':
                 print("Members: ")
                 for m in self.membership_list:
-                    print(m)
+                     print(m)
                 print("neighbors: ")
                 for n in self.neighbors:
                     print(n)
@@ -308,7 +308,6 @@ class MmpServer:
                                 Main Function
     -----------------------------------------------------------------------
     '''
-
 
 if __name__ == '__main__':
     mmpServer = MmpServer()
