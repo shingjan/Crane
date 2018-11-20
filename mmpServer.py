@@ -17,6 +17,7 @@ class MmpServer:
         self.mmp_socket_list = []
         self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.mmp_sender = threading.Thread(target=self.mmp_sender_thread)
+        self.mmp_tcp_receiver = threading.Thread(target=)
         self.mmp_cmd = threading.Thread(target=self.mmp_cmd_thread)
 
         self.mmp_socket_list = MMP_SOCKET_LIST
@@ -37,12 +38,12 @@ class MmpServer:
     def run(self):
         self.mmp_receiver.start()
         self.mmp_sender.start()
-        self.mmp_cmd.start()
+        #self.mmp_cmd.start()
 
     def terminate(self):
         self.mmp_receiver.join()
         self.mmp_sender.join()
-        self.mmp_cmd.join()
+        #self.mmp_cmd.join()
 
     def _unicast(self, cmd, msg, ip, port, flag):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -302,6 +303,11 @@ class MmpServer:
             self._update_neighbors()
             #self._build_file_dict()
             # TODO build file dict
+    '''
+    -----------------------------------------------------------------------
+                                Main Function
+    -----------------------------------------------------------------------
+    '''
 
 
 if __name__ == '__main__':
