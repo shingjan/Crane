@@ -146,7 +146,7 @@ class DfsServer:
                     break
                 chunks.append(data)
             except socket.timeout:
-                pass
+                continue
         print(pk.loads(b''.join(chunks)))
         skt.close()
         return False
