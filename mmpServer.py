@@ -265,7 +265,7 @@ class MmpServer:
             elif cmd == 'ls':
                 print("Members: ")
                 for m in self.membership_list:
-                    print(m)
+                     print(m)
                 print("neighbors: ")
                 for n in self.neighbors:
                     print(n)
@@ -303,7 +303,6 @@ class MmpServer:
             self._update_neighbors()
             #self._build_file_dict()
             # TODO build file dict
-
 
 if __name__ == '__main__':
     mmpServer = MmpServer()
