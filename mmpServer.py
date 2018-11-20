@@ -73,11 +73,13 @@ class MmpServer:
     def run(self):
         self.mmp_receiver.start()
         self.mmp_sender.start()
+        self.mmp_tcp_receiver.start()
         self.mmp_cmd.start()
 
     def terminate(self):
         self.mmp_receiver.join()
         self.mmp_sender.join()
+        self.mmp_tcp_receiver.join()
         self.mmp_cmd.join()
 
     def _unicast(self, cmd, msg, ip, port, flag):
