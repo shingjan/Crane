@@ -301,7 +301,6 @@ class MmpServer:
             except socket.timeout:
                 continue
 
-
     def mmp_cmd_thread(self):
         while True:
             cmd = input('Available cmds: ls, self, join, dec, ld and exit. Enter: ')

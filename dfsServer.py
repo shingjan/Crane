@@ -125,7 +125,7 @@ class DfsServer:
             skt.sendto(packet, (i, port))
         skt.close()
 
-    def _start(self):
+    def start(self):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         skt.settimeout(2)
         connected = False
@@ -133,11 +133,13 @@ class DfsServer:
             try:
                 skt.connect(('0.0.0.0', self.mmp_tcp_port))
                 connected = True
+                print('connection established')
             except socket.timeout:
                 pass
         msg = pk.dumps('mmp')
         skt.sendall(msg)
         skt.close()
+        return False
 
 
     '''
@@ -524,7 +526,7 @@ class DfsServer:
 if __name__ == '__main__':
     #mmpServer = MmpServer()
     dfsServer = DfsServer()
-    if dfsServer._start():
+    if dfsServer.start():
         dfsServer.run()
         dfsServer.terminate()
     else:
