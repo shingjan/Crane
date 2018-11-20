@@ -291,7 +291,6 @@ class MmpServer:
 
     def mmp_tcp_receiver_thread(self):
         while True:
-            print('aaa')
             try:
                 conn, addr = self.tcp_socket.accept()
                 print('Connection addr:', addr)
@@ -300,6 +299,15 @@ class MmpServer:
                     if not data:
                         break
                     print(pk.loads(data))
+                mmp = pk.dumps(self.membership_list)
+                total_len = len(mmp)
+                total_sent = 0
+                while total_sent < total_len:
+                    sent = self.tcp_socket.send(mmp[total_sent:])
+                    if sent == 0:
+                        raise RuntimeError("socket connection broken")
+                    total_sent = total_sent + sent
+                conn.sendall(mmp)
                 conn.close()
             except socket.timeout:
                 continue
