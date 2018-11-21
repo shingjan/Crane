@@ -138,6 +138,16 @@ class DfsServer:
                 pass
         msg = pk.dumps('mmp')
         skt.sendall(msg)
+        chunks = []
+        while True:
+            try:
+                data = skt.recv(1024)
+                if not data:
+                    break
+                chunks.append(data)
+            except socket.timeout:
+                continue
+        print(pk.loads(b''.join(chunks)))
         skt.close()
         return False
 
