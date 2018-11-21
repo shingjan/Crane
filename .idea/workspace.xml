@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/dfsServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/dfsServer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mmpServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/mmpServer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,14 +34,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1998" />
+          <entry key="py" value="2283" />
           <entry key="sh" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="1998" />
+          <entry key="Python" value="2283" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -54,7 +53,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dfsClient.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-970">
+            <state relative-caret-position="90">
               <caret line="6" selection-start-line="6" selection-end-line="6" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -66,24 +65,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dfsServer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2746">
-              <caret line="545" column="4" selection-start-line="545" selection-start-column="5" selection-end-line="545" selection-end-column="28" />
+            <state relative-caret-position="-222">
+              <caret line="156" column="23" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <marker date="1542758207503" expanded="true" signature="4525:5274" ph="..." />
-                <marker date="1542758207503" expanded="true" signature="14786:14791" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="37" column="4" lean-forward="true" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <marker date="1542760474721" expanded="true" signature="5368:5518" ph="..." />
+                <marker date="1542760474721" expanded="true" signature="15372:15449" ph="..." />
               </folding>
             </state>
           </provider>
@@ -92,23 +79,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mmpServer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3751">
+            <state relative-caret-position="280">
               <caret line="300" column="36" selection-start-line="300" selection-start-column="36" selection-end-line="300" selection-end-column="36" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
                 <marker date="1542757815960" expanded="true" signature="12063:12787" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/env.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -268,26 +243,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/env.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dfsClient.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-970">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
@@ -298,9 +253,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/env.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mmpServer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3751">
+        <state relative-caret-position="280">
           <caret line="300" column="36" selection-start-line="300" selection-start-column="36" selection-end-line="300" selection-end-column="36" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
@@ -309,14 +274,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dfsClient.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dfsServer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2746">
-          <caret line="545" column="4" selection-start-line="545" selection-start-column="5" selection-end-line="545" selection-end-column="28" />
+        <state relative-caret-position="-222">
+          <caret line="156" column="23" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1542758207503" expanded="true" signature="4525:5274" ph="..." />
-            <marker date="1542758207503" expanded="true" signature="14786:14791" ph="..." />
+            <marker date="1542760474721" expanded="true" signature="5368:5518" ph="..." />
+            <marker date="1542760474721" expanded="true" signature="15372:15449" ph="..." />
           </folding>
         </state>
       </provider>

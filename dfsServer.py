@@ -25,6 +25,7 @@ class DfsServer:
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.is_running = False
         self.dfs_receiver = threading.Thread(target=self.dfs_receiver_thread)
+        self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.cmd = threading.Thread(target=self.cmd_thread)
         # ----------------------------
         # init logger: level INFO used
@@ -147,9 +148,14 @@ class DfsServer:
                 chunks.append(data)
             except socket.timeout:
                 continue
-        print(pk.loads(b''.join(chunks)))
         skt.close()
-        return True
+        return self.delta(pk.loads(b''.join(chunks)))
+
+    def delta(self, new_mmp):
+        if not self.membership_list:
+            self.membership_list = new_mmp
+            return True
+        # TODO: realize the difference
 
 
     '''
@@ -297,7 +303,6 @@ class DfsServer:
             if f[-1] == str(lastest):
                 lastest_file = f
                 break
-
         for ip in self.neighbors:
             self._unicast('recv', sdfs_name, ip, 9100 + self.dfs_socket_dict['recv'][1], False)
             #self._send_file_to(lastest_file, ip, self.tcp_port)
@@ -431,6 +436,11 @@ class DfsServer:
                         self.exec_dfs_message(message, address)
             except socket.timeout:
                 continue
+
+    def mmp_receiver_thread(self):
+        while True:
+            time.sleep(1)
+            self.start()
 
     def cmd_thread(self):
         while True:
