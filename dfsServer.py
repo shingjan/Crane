@@ -52,6 +52,9 @@ class DfsServer:
         self.file_dir = "../dfs/"
         self.tmp_file_dir = "../tmp/"
         self.delimiter = "-"
+        # ----------------------------
+        # tcp/udp socket setup
+        # ----------------------------
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_port = DFS_TCP_PORT
         self.client_tcp_port = CLIENT_TCP_PORT
@@ -380,12 +383,20 @@ class DfsServer:
     def dfs_receiver_thread(self):
         while True:
             try:
-                if self.is_running:
-                    readable, _, _ = select.select(self.dfs_socket_list, [], [])
-                    for s in readable:
-                        msg, address = s.recvfrom(65535)
-                        message = pk.loads(msg)
-                        self.exec_dfs_message(message, address)
+                conn, addr = self.tcp_socket.accept()
+                msg = conn.recv(1024)
+                msg = pk.loads(msg)
+                if msg == 'sendTo':
+                    print('sendTo msg')
+                elif msg == 'recvFr':
+                    print('recvFr msg')
+                elif msg == 'sendFile':
+                    print('sendFile msg')
+                elif msg == 'recvFile':
+                    print('recvFile msg')
+                elif msg == 'delFile':
+                    print('delFile msg')
+                conn.close()
             except socket.timeout:
                 continue
 

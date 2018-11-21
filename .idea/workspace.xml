@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="" />
+    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dfsServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/dfsServer.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,14 +35,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="2283" />
+          <entry key="py" value="2398" />
           <entry key="sh" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="2283" />
+          <entry key="Python" value="2398" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -63,12 +66,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dfsServer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5868">
-              <caret line="156" column="23" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
+            <state relative-caret-position="297">
+              <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <marker date="1542760474721" expanded="true" signature="5368:5518" ph="..." />
-                <marker date="1542760474721" expanded="true" signature="15372:15449" ph="..." />
               </folding>
             </state>
           </provider>
@@ -104,6 +105,7 @@
       <find>9200</find>
       <find>_reset</find>
       <find>_start_repair_file</find>
+      <find>sleep</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -185,6 +187,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
@@ -260,6 +263,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dfsClient.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mmpServer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
@@ -271,24 +284,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dfsClient.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dfsServer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5868">
-          <caret line="156" column="23" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
+        <state relative-caret-position="297">
+          <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1542760474721" expanded="true" signature="5368:5518" ph="..." />
-            <marker date="1542760474721" expanded="true" signature="15372:15449" ph="..." />
           </folding>
         </state>
       </provider>
