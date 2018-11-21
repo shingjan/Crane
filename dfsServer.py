@@ -232,13 +232,17 @@ class DfsServer:
 
         alive = [i[0] for i in self.membership_list]
         candidates = [i for i in was_in if i in alive]
+        absoluate_candidates = [i for i in candidates if i in should_in]
+        if not absoluate_candidates:
+            sender = candidates[0]
+        else:
+            sender = absoluate_candidates[0]
+
+        for n in to_get:
+            self._send_file_from_to(sdfs_name, sender, n)
 
         for n in to_del:
             self._del_file_from(sdfs_name, n)
-
-        for n in to_get:
-            sender = candidates[0]
-            self._send_file_from_to(sdfs_name, sender, n)
 
     def _del_file_from(sdfs_name, node_ip):
         # TODO
