@@ -132,6 +132,7 @@ class DfsServer:
         return self._delta(pk.loads(b''.join(chunks)))
 
     def _delta(self, new_mmp):
+        self.leader = new_mmp[0]
         if not self.membership_list:
             self.membership_list = new_mmp
         # TODO: return False?
@@ -418,7 +419,6 @@ class DfsServer:
                     print("Global file dict", self.file_dict)
             elif cmd == 'exit':
                 os._exit(0)
-
             else:
                 print("Invalid cmd, enter again:")
 
