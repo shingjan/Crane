@@ -6,7 +6,7 @@ import pickle as pk
 import threading
 import select
 import glob
-from mmpServer import MmpServer
+#from mmpServer import MmpServer
 from env import IP_LIST, INDEX_LIST, DFS_TCP_PORT, CLIENT_TCP_PORT, MMP_TCP_PORT
 
 
