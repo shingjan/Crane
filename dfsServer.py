@@ -149,7 +149,7 @@ class DfsServer:
                 continue
         print(pk.loads(b''.join(chunks)))
         skt.close()
-        return False
+        return True
 
 
     '''
