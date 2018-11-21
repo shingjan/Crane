@@ -60,28 +60,6 @@ class DfsServer:
         self.tcp_socket.settimeout(2)
         self.tcp_socket.listen(10)
 
-        num_udp_sockets = 12
-        self.dfs_socket_list = []
-        for i in range(num_udp_sockets):
-            temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            temp.bind(('0.0.0.0', 9100 + i))
-            temp.settimeout(2)
-            self.dfs_socket_list.append(temp)
-
-        self.dfs_socket_dict = {
-            'get': (self.dfs_socket_list[0], 0),
-            'put': (self.dfs_socket_list[1], 1),
-            'del': (self.dfs_socket_list[2], 2),
-            'ls': (self.dfs_socket_list[3], 3),
-            'getv': (self.dfs_socket_list[4], 4),
-            'req': (self.dfs_socket_list[5], 5),
-            'repair': (self.dfs_socket_list[6], 6),
-            'dict': (self.dfs_socket_list[7], 7),
-            'recv': (self.dfs_socket_list[8], 8),
-            'ask_dict': (self.dfs_socket_list[9], 9),
-            'del_file': (self.dfs_socket_list[10], 10),
-            'get_all': (self.dfs_socket_list[11], 11)}
-
     '''
     -----------------------------------------------------------------------
                               Mmp Helper functions
@@ -151,9 +129,9 @@ class DfsServer:
             except socket.timeout:
                 continue
         skt.close()
-        return self.delta(pk.loads(b''.join(chunks)))
+        return self._delta(pk.loads(b''.join(chunks)))
 
-    def delta(self, new_mmp):
+    def _delta(self, new_mmp):
         if not self.membership_list:
             self.membership_list = new_mmp
         # TODO: return False?
@@ -444,84 +422,6 @@ class DfsServer:
             else:
                 print("Invalid cmd, enter again:")
 
-    def exec_dfs_message(self, message, address):
-        if message['cmd'] == 'ask_dict':
-            self._unicast('dict', self.local_file_dict, message['ip'], 9100 + self.dfs_socket_dict['dict'][1], False)
-        elif message['cmd'] == 'get':
-            primary_node = self._hash(message['data'])
-            if self.leader == self.local_ip:
-                '''
-                Tell client who is the primary node, through port - 9200
-                '''
-                self._unicast('recv', primary_node, message['ip'], 9200 + self.dfs_socket_dict['recv'][1], False)
-            if self.local_ip == primary_node:
-                full_sdfs_name = self._get_file_by_name(message['data'])
-                print(full_sdfs_name)
-                if full_sdfs_name:
-                    '''
-                    Tell client to receive file through port - 6666
-                    '''
-                    self._send_file_to(full_sdfs_name, message['ip'], self.client_tcp_port)
-                else:
-                    print('No file with name: ' + message['data'] + " found on the server")
-        elif message['cmd'] == 'put':
-            primary_node = self._hash(message['data'])
-            if self.local_ip == self.leader:
-                self.file_dict[message['data']] = [primary_node] + self._get_neighbors(primary_node)
-                '''
-                Tell client who is the primary node, through port - 9200
-                '''
-                self._unicast('req', primary_node, message['ip'], 9200 + self.dfs_socket_dict['req'][1], False)
-        elif message['cmd'] == 'del':
-            if self.local_ip == self.leader:
-                if message['data'] in self.file_dict:
-                    self.file_dict.pop(message['data'])
-            primary_node = self._hash(message['data'])
-            if primary_node == self.local_ip:
-                self._del_file_by_name(message['data'])
-                self._multicast('del_file', message['data'], self.neighbors, 9100 + self.dfs_socket_dict['del'][1], False)
-            else:
-                # For leader
-                self._unicast('del', message['data'], primary_node, 9100 + self.dfs_socket_dict['del'][1], False)
-        elif message['cmd'] == 'ls':
-            '''
-            Tell client the result of 'ls' cmd, through port - 9200
-            '''
-            #self._build_file_dict()
-            if message['data'] in self.file_dict:
-                self._unicast('ls', self.file_dict[message['data']], message['ip'], 9200 + self.dfs_socket_dict['ls'][1], False)
-            else:
-                self._unicast('ls', [], message['ip'], 9200 + self.dfs_socket_dict['ls'][1], False)
-
-        elif message['cmd'] == 'getv':
-            sdfs_name = message['data'][0]
-            num_versions = message['data'][1]
-            primary_node = self._hash(sdfs_name)
-            if self.leader == self.local_ip and primary_node != self.local_ip:
-                '''
-                Tell client the primary node of that sdfs_file, through port - 9200 + 'req'
-                '''
-                self._unicast('req', primary_node, message['ip'], 9200 + self.dfs_socket_dict['req'][1], False)
-            elif primary_node == self.local_ip:
-                if sdfs_name in self.local_file_dict:
-                    self._send_all_file_to(sdfs_name, num_versions, message['ip'], self.client_tcp_port)
-                else:
-                    print("File is not on the dict. Abort.")
-        elif message['cmd'] == 'repair':
-            self._repair(message['data'][0], message['data'][1])
-        elif message['cmd'] == 'dict':
-            self._update_file_dict(message['data'], message['ip'])
-        elif message['cmd'] == 'recv':
-            self._recv_file_from(message['data'])
-            if self._hash(message['data']) == self.local_ip:
-                self._repair_put(message['data'])
-        elif message['cmd'] == 'del_file':
-            self._del_file_by_name(message['data'])
-        elif message['cmd'] == 'get_all':
-            all_files = self._get_all_versions(message['data'])
-            self._unicast('req', len(all_files), message['ip'], 9100 + self.dfs_socket_dict['req'][1], False)
-            for f in all_files:
-               self._send_file_to(f, message['ip'], self.tcp_port)
     '''
     -----------------------------------------------------------------------
                                 Main Function
