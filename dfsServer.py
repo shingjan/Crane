@@ -212,7 +212,7 @@ class DfsServer:
 
     def _start_repair_file(self, sdfs_name, ip, ori_ls):
         """
-        in leader
+        in leader ?
         p: primary node
         op: the last primary node
         ls: current mmp list
@@ -222,15 +222,23 @@ class DfsServer:
         nb = self._get_neighbors(sdfs_name)
         should_in = [p] + nb
 
-
         op = self._hash(sdfs_name, ori_ls)
-        ori_nb = self._get_neighbors(ori_primary_node, ori_hosts)
-        ls = [ori_primary_node] + ori_nb
-        send_file()
+        ori_nb = self._get_neighbors(sdfs_name, ori_ls)
+        was_in = [op] + ori_nb
+        to_del = [i for i in was_in if i not in should_in]
+        to_get = [i for i in should_in if i not in should_in]
+        for i in to_del:
+            # TODO
+            # send msg to del files
+            pass
+        for i in to_get:
+            # TODO
+            send_file(p, i, sdfs_name)
         #self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
 
     def _repair(self, sdfs_name, ls):
         '''
+        actually serves in _start_repair_file
         Re-replication while a node crashed, given sdfsfilename
         1. check if file in primary node
         2. get file if not in pri
