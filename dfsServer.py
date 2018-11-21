@@ -89,10 +89,12 @@ class DfsServer:
     '''
     def run(self):
         self.dfs_receiver.start()
+        self.mmp_receiver.start()
         self.cmd.start()
 
     def terminate(self):
         self.dfs_receiver.join()
+        self.mmp_receiver.join()
         self.cmd.join()
 
     def _unicast(self, cmd, msg, ip, port, flag):
