@@ -25,6 +25,7 @@ class DfsServer:
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.is_running = False
         self.dfs_receiver = threading.Thread(target=self.dfs_receiver_thread)
+        self.mmp_receiver = threading.Thread(target=self.mmp_receiver_thread)
         self.cmd = threading.Thread(target=self.cmd_thread)
         # ----------------------------
         # init logger: level INFO used
@@ -147,10 +148,20 @@ class DfsServer:
                 chunks.append(data)
             except socket.timeout:
                 continue
-        print(pk.loads(b''.join(chunks)))
         skt.close()
-        return False
+        return self.delta(pk.loads(b''.join(chunks)))
 
+    def delta(self, new_mmp):
+        if not self.membership_list:
+            self.membership_list = new_mmp
+        # TODO: return False?
+        elif self.membership_list != new_mmp:
+            ori_ls = self.membership_list
+            self.membership_list = new_mmp
+            if self.local_ip == self.leader:
+                for f in self.file_dict.keys():
+                    self._start_repair_file(f, ori_ls)
+        return True
 
     '''
     -----------------------------------------------------------------------
@@ -220,9 +231,9 @@ class DfsServer:
             if k >= -n and k < n:
                 return ls[k]
 
-    def _start_repair_file(self, sdfs_name, ip, ori_ls):
+    def _start_repair_file(self, sdfs_name, ori_ls):
         """
-        in leader ?
+        leader repair
         p: primary node
         op: the last primary node
         ls: current mmp list
@@ -236,71 +247,32 @@ class DfsServer:
         ori_nb = self._get_neighbors(sdfs_name, ori_ls)
         was_in = [op] + ori_nb
         to_del = [i for i in was_in if i not in should_in]
-        to_get = [i for i in should_in if i not in should_in]
-        for i in to_del:
-            # TODO
-            # send msg to del files
-            pass
-        for i in to_get:
-            # TODO
-            send_file(p, i, sdfs_name)
-        #self._unicast('repair', (sdfs_name, ls), primary_node, 9100 + self.dfs_socket_dict['repair'][1], False)
+        to_get = [i for i in should_in if i not in was_in]
 
-    def _repair(self, sdfs_name, ls):
-        '''
-        actually serves in _start_repair_file
-        Re-replication while a node crashed, given sdfsfilename
-        1. check if file in primary node
-        2. get file if not in pri
-        3. check del
-        4. check send
-        ls:  original membership list
-        # send_file(sender, receiver, filename)
-        '''
-        print("Repair started! File will be stored in me", self.local_ip, "and", self.neighbors)
-        fnames = self.file_dir + sdfs_name + '*'
-        files = glob.glob(fnames)
-        member_hosts = [i[0] for i in self.membership_list]
-        if not files:
-            for ip in ls:
-                if ip in member_hosts:
-                    self._unicast('get_all', sdfs_name, ip, 9100 + self.dfs_socket_dict['get_all'][1], False)
-                    break
-        try:
-            message, addr = self.dfs_socket_dict['req'][0].recvfrom(65535)
-            msg = pk.loads(message)
-            versions = msg['data']
-            for i in range(versions):
-                self._recv_file_from(sdfs_name)
-        except socket.timeout:
-            print("no file received from get_all req")
+        alive = [i[0] for i in self.membership_list]
+        candidates = [i for i in was_in if i in alive]
 
-        to_del_nodes = [i[0] for i in self.membership_list if i[0] != self.local_ip]
-        for ip in to_del_nodes:
-            self._unicast('del_file', sdfs_name, ip, 9100 + self.dfs_socket_dict['del_file'][1], False)
+        for n in to_del:
+            self._del_file_from(sdfs_name, n)
 
-        time.sleep(0.5)
-        all_files = self._get_all_versions(sdfs_name)
-        for ip in self.neighbors:
-            print(self.local_ip, " sending ", sdfs_name, " to ", ip)
-            for f in all_files:
-                self._unicast('recv', sdfs_name, ip, 9100 + self.dfs_socket_dict['recv'][1], False)
-                self._send_file_to(f, ip, self.tcp_port)
+        for n in to_get:
+            sender = candidates[0]
+            self._send_file_from_to(sdfs_name, sender, n)
 
-        print("Repair finished!")
+    def _del_file_from(sdfs_name, node_ip):
+        # TODO
+        """
+        sdfs_name: file to del
+        node_ip: node should del the file
+        """
+        pass
 
-    def _repair_put(self, sdfs_name):
-        all_files = self._get_all_versions(sdfs_name)
-        all_ver = [int(i[-1]) for i in all_files]
-        lastest = max(all_ver)
-        for f in all_files:
-            if f[-1] == str(lastest):
-                lastest_file = f
-                break
-
-        for ip in self.neighbors:
-            self._unicast('recv', sdfs_name, ip, 9100 + self.dfs_socket_dict['recv'][1], False)
-            #self._send_file_to(lastest_file, ip, self.tcp_port)
+    def _send_file_from_to(sdfs_name, sender_ip, receiver_ip):
+        """
+        sdfs_name: file to send/recv
+        sender_ip: the primary
+        """
+        pass
 
     def _get_all_versions(self, sdfs_name):
         prefix = self.file_dir+sdfs_name+'*'
@@ -431,6 +403,11 @@ class DfsServer:
                         self.exec_dfs_message(message, address)
             except socket.timeout:
                 continue
+
+    def mmp_receiver_thread(self):
+        while True:
+            time.sleep(1)
+            self.start()
 
     def cmd_thread(self):
         while True:
