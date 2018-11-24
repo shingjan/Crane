@@ -1,9 +1,9 @@
 from util import Bolt, TopologyBuilder
 
 
-class SplitBolt:
-    def __init__(Bolt):
-        super().__init__()
+class SplitBolt(Bolt):
+    def __init__(self):
+        super(SplitBolt, self).__init__('SplitBolt')
 
     def execute(self, tup, collector):
         words = tup.values[0].split(' ')
@@ -11,9 +11,9 @@ class SplitBolt:
             collector.emit([word])
 
 
-class CountBolt:
-    def __init__(self, Bolt):
-        super().__init__()
+class CountBolt(Bolt):
+    def __init__(self):
+        super(CountBolt, self).__init__('CountBolt')
         self.counts = {}
 
     def execute(self, tup, collector):
