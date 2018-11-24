@@ -1,4 +1,4 @@
-# mp3-ys26-weilinz2
+# mp4-ys26-weilinz2
 
 Run server/client on each node
 

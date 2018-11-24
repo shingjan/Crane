@@ -4,9 +4,8 @@ import logging
 import os
 import pickle as pk
 import threading
-import select
 import glob
-from env import IP_LIST, INDEX_LIST, DFS_TCP_MMP_PORT, DFS_TCP_SEND_PORT, DFS_TCP_RECV_PORT, DFS_TCP_DEL_PORT,CLIENT_TCP_PORT, MMP_TCP_PORT
+from dfs.env import IP_LIST, INDEX_LIST, DFS_TCP_MMP_PORT, DFS_TCP_SEND_PORT, DFS_TCP_RECV_PORT, DFS_TCP_DEL_PORT,CLIENT_TCP_PORT, MMP_TCP_PORT
 
 
 # TODO: build, delete file

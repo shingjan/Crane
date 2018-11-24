@@ -11,9 +11,12 @@ class TopologyBuilder:
     def __init__(self):
         self.bolt_graph = None
 
-    def set_bolt(self, *args):
+    def set_bolt(self, bolt, group_method):
         pass
 
     def set_spout(self, file_path):
         pass
 
+
+CRANE_MASTER_UDP_PORT = 9527
+CRANE_SLAVE_UDP_PORT = 9528

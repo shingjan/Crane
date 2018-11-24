@@ -26,9 +26,8 @@ class CountBolt(Bolt):
         collector.emit((word, count))
 
 
-if __name__ == '__main__':
-    topologyBuilder = TopologyBuilder()
-    topologyBuilder.set_spout('wordcount.txt')
-    topologyBuilder.set_bolt(SplitBolt)
-    topologyBuilder.set_bolt(CountBolt)
+word_count_topology = TopologyBuilder()
+word_count_topology.set_spout('wordcount.txt')
+word_count_topology.set_bolt(SplitBolt, 'shuffle')
+word_count_topology.set_bolt(CountBolt, 'hash')
 
