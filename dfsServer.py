@@ -6,8 +6,7 @@ import pickle as pk
 import threading
 import select
 import glob
-#from mmpServer import MmpServer
-from env import IP_LIST, INDEX_LIST, DFS_TCP_PORT, CLIENT_TCP_PORT, MMP_TCP_PORT
+from env import IP_LIST, INDEX_LIST, DFS_TCP_MMP_PORT, DFS_TCP_SEND_PORT, DFS_TCP_RECV_PORT, DFS_TCP_DEL_PORT,CLIENT_TCP_PORT, MMP_TCP_PORT
 
 
 # TODO: build, delete file
@@ -55,8 +54,14 @@ class DfsServer:
         # ----------------------------
         # tcp/udp socket setup
         # ----------------------------
-        self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp_port = DFS_TCP_PORT
+        self.tcp_mmp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp_send_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp_recv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp_del_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp_mmp_port = DFS_TCP_MMP_PORT
+        self.tcp_send_port = DFS_TCP_SEND_PORT
+        self.tcp_recv_port = DFS_TCP_RECV_PORT
+        self.tcp_del_port = DFS_TCP_DEL_PORT
         self.client_tcp_port = CLIENT_TCP_PORT
         self.mmp_tcp_port = MMP_TCP_PORT
         self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
@@ -393,6 +398,7 @@ class DfsServer:
                 elif msg == 'sendFile':
                     print('sendFile msg')
                 elif msg == 'recvFile':
+                    # not usable temporarily
                     print('recvFile msg')
                 elif msg == 'delFile':
                     print('delFile msg')
