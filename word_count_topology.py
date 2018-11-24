@@ -1,4 +1,4 @@
-from util import Bolt, TopologyBuilder
+from util import Bolt, Topology
 
 
 class SplitBolt(Bolt):
@@ -26,8 +26,8 @@ class CountBolt(Bolt):
         collector.emit((word, count))
 
 
-word_count_topology = TopologyBuilder()
-word_count_topology.set_spout('wordcount.txt')
+word_count_topology = Topology("WordCount Topology")
+word_count_topology.set_spout('README.md')
 word_count_topology.set_bolt(SplitBolt, 'shuffle')
 word_count_topology.set_bolt(CountBolt, 'hash')
 
