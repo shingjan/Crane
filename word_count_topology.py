@@ -6,7 +6,7 @@ class SplitBolt(Bolt):
         super(SplitBolt, self).__init__('SplitBolt')
 
     def execute(self, rid, tup, collector):
-        words = tup[0].split(' ')
+        words = tup.split(' ')
         xor_id = rid
         for word in words:
             print(word)

@@ -68,6 +68,7 @@ class CraneSlave:
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
         curr_bolt.execute(curr_bolt, rid, tup, self.collector)
 
+
 if __name__ == '__main__':
     craneSlave = CraneSlave()
     craneSlave.run()
