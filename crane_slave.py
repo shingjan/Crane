@@ -24,7 +24,7 @@ class Collector:
 
     def emit(self, tup):
         print('slave emit stage')
-        self._unicast(None, None, tup, None, None, self.leader, CRANE_AGGREGATOR_PORT)
+        self._unicast(None, None, tup.tup, None, None, self.leader, CRANE_AGGREGATOR_PORT)
 
     def ack(self, tup, rid, xor_id):
         print('slave ack stage')
