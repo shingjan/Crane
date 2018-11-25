@@ -1,3 +1,6 @@
+import uuid
+
+
 class Bolt:
     def __init__(self, bolt_type):
         self.next_bolt = None
@@ -18,7 +21,6 @@ class Spout:
             return None
         return line
 
-
     def close(self):
         self.target.close()
 
@@ -36,8 +38,15 @@ class Topology:
         self.spout = Spout(file_path)
 
 
+class Tuple:
+    def __init__(self, tup):
+        self.tup = tup
+        self.uid = uuid.uuid4()
+
+
 CRANE_MASTER_UDP_PORT = 9527
 CRANE_SLAVE_UDP_PORT = 9528
+CRANE_MAX_INTERVAL = 10
 
 IP_LIST = {
         "172.22.158.208": 1,
