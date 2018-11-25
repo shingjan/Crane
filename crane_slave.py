@@ -14,7 +14,7 @@ class CraneSlave:
         self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_UDP_PORT))
         self.udp_receiver_socket.settimeout(2)
 
-        self.leader = '172.22.158.208'
+        self.leader = '172.22.154.209'
         self.prefix = "SLAVE - [INFO]: "
 
     def run(self):

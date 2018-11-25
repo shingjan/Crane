@@ -20,7 +20,7 @@ class CraneMaster:
         self.aggregator_socket.bind(('0.0.0.0', CRANE_AGGREGATOR_PORT))
         self.aggregator_socket.settimeout(2)
 
-        self.leader = '172.22.158.208'
+        self.leader = '172.22.154.209'
         self.prefix = "MASTER - [INFO]: "
         self.slaves = [list(IP_LIST.keys())[i] for i in range(1, 10)]
         self.root_tup_ts_dict = {}
@@ -91,7 +91,7 @@ class CraneMaster:
         big_tuple = Tuple(tup)
         self.root_tup_ts_dict[big_tuple.uid] = (tup, time.time(), big_tuple.uid)
         # Send to VM3 for testing purposes
-        print(self.slaves[1])
+        print(self.slaves[0])
         self._unicast(top_num, 0, tup, big_tuple.uid, 0, self.slaves[1], CRANE_SLAVE_UDP_PORT)
 
     def start_top(self):
