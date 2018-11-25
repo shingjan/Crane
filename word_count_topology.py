@@ -9,6 +9,7 @@ class SplitBolt(Bolt):
         words = tup[0].split(' ')
         xor_id = rid
         for word in words:
+            print(word)
             tmp_tuple = Tuple(word)
             xor_id ^= tmp_tuple.uid
             collector.emit(tmp_tuple)

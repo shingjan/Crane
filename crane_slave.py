@@ -49,14 +49,17 @@ class CraneSlave:
         top_num = msg['topology']
         bolt_num = msg['bolt']
         tup = msg['tup']
+        print(tup)
         rid = msg['rid']
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
         curr_bolt.execute(rid, tup, self)
 
     def emit(self, tup):
+        print('slave emit stage')
         self._unicast(None, None, tup, None, None, self.leader, CRANE_AGGREGATOR_PORT)
 
     def ack(self, tup, rid, xor_id):
+        print('slave ack stage')
         self._unicast(None, None, tup, rid, xor_id, self.leader, CRANE_MASTER_UDP_PORT)
 
 
