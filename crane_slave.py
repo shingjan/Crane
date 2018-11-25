@@ -1,7 +1,7 @@
 import pickle as pk
 import threading
 import socket
-from word_count_topology import word_count_topology
+from app.word_count_topology import word_count_topology
 from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
 
 

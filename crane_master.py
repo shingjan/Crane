@@ -2,7 +2,7 @@ import pickle as pk
 import threading
 import socket
 import time
-from word_count_topology import word_count_topology
+from app.word_count_topology import word_count_topology
 from util import Tuple, IP_LIST, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, CRANE_MAX_INTERVAL
 
 
@@ -39,8 +39,6 @@ class CraneMaster:
                 message, addr = self.udp_receiver_socket.recvfrom(65535)
                 msg = pk.loads(message)
                 rid = msg['rid']
-                print(rid)
-                print(msg['xor_id'])
                 old_rid = self.root_tup_ts_dict[rid][2]
                 self.root_tup_ts_dict[rid][2] = old_rid ^ msg['xor_id']
             except socket.timeout:
