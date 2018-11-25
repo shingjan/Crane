@@ -97,7 +97,7 @@ class CraneMaster:
     def emit(self, tup, top_num):
         # print(tup)
         big_tuple = Tuple(tup)
-        self.root_tup_ts_dict[big_tuple.uid] = (tup, time.time(), big_tuple.uid)
+        self.root_tup_ts_dict[big_tuple.uid] = [tup, time.time(), big_tuple.uid]
         # Send to VM3 for testing purposes
         self._unicast(top_num, 0, tup, big_tuple.uid, 0, "172.22.156.209", CRANE_SLAVE_UDP_PORT)
 
