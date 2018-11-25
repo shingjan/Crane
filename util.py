@@ -41,11 +41,12 @@ class Topology:
 class Tuple:
     def __init__(self, tup):
         self.tup = tup
-        self.uid = uuid.uuid4()
+        self.uid = uuid.uuid4().int
 
 
 CRANE_MASTER_UDP_PORT = 9527
 CRANE_SLAVE_UDP_PORT = 9528
+CRANE_AGGREGATOR_PORT = 9529
 CRANE_MAX_INTERVAL = 10
 
 IP_LIST = {
