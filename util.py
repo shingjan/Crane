@@ -6,7 +6,7 @@ class Bolt:
         self.next_bolt = None
         self.bolt_type = bolt_type
 
-    def execute(self, tup, collector):
+    def execute(self, rid, tup, collector):
         pass
 
 
@@ -31,7 +31,7 @@ class Topology:
         self.bolt_list = []
         self.spout = None
 
-    def set_bolt(self, bolt, group_methd):
+    def set_bolt(self, bolt, group_method):
         self.bolt_list.append(bolt)
 
     def set_spout(self, file_path):

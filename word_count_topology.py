@@ -1,14 +1,18 @@
-from util import Bolt, Topology
+from util import Bolt, Topology, Tuple
 
 
 class SplitBolt(Bolt):
     def __init__(self):
         super(SplitBolt, self).__init__('SplitBolt')
 
-    def execute(self, tup, collector):
-        words = tup.values[0].split(' ')
+    def execute(self, rid, tup, collector):
+        words = tup[0].split(' ')
+        xor_id = rid
         for word in words:
-            collector.emit([word])
+            tmp_tuple = Tuple(word)
+            xor_id ^= tmp_tuple.uid
+            collector.emit(tmp_tuple)
+        collector.ack(tup, rid, rid)  # xor_id)
 
 
 class CountBolt(Bolt):
@@ -16,14 +20,16 @@ class CountBolt(Bolt):
         super(CountBolt, self).__init__('CountBolt')
         self.counts = {}
 
-    def execute(self, tup, collector):
-        word = tup.getString(0)
+    def execute(self, rid, tup, collector):
+        word = tup[0]
         count = 0
         if word in self.counts:
             count = self.counts.get(word)
         count += 1
         self.counts[word] = count
-        collector.emit((word, count))
+        tmp_tuple = Tuple((word, count))
+        collector.emit(tmp_tuple)
+        collector.ack(tup, rid, rid ^ tmp_tuple.uid)
 
 
 word_count_topology = Topology("WordCount Topology")

@@ -27,10 +27,11 @@ class CraneMaster:
         self.final_result = []
 
         # Multi thread
-        self.monitor_thread = threading.Thread(target=self.udp_recevier)
-        self.udp_recevier_thread = threading.Thread(target=self.crane_monitor)
+        self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
+        self.monitor_thread = threading.Thread(target=self.crane_monitor)
         self.aggregator_thread = threading.Thread(target=self.crane_aggregator)
         self.udp_recevier_thread.start()
+        self.aggregator_thread.start()
 
     def udp_recevier(self):
         while True:
@@ -56,9 +57,11 @@ class CraneMaster:
                 else:
                     time_spent = time.time() - time_stamp
                     if time_spent >= CRANE_MAX_INTERVAL:
+                        print(self.prefix, 'Tuple ', tup, ' has been processed more than 10 secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(self.root_tup_ts_dict):
-                print('All tuples has been fully processed. Fetching results...')
+                print(self.prefix, 'All tuples has been fully processed. Fetching results...')
+                print(self.final_result)
                 break
 
     def crane_aggregator(self):
@@ -87,7 +90,8 @@ class CraneMaster:
         print(tup)
         big_tuple = Tuple(tup)
         self.root_tup_ts_dict[big_tuple.uid] = (tup, time.time(), big_tuple.uid)
-        self._unicast(top_num, 0, tup, big_tuple.uid, 0, self.slaves[0], CRANE_SLAVE_UDP_PORT)
+        # Send to VM3 for testing purposes
+        self._unicast(top_num, 0, tup, big_tuple.uid, 0, self.slaves[1], CRANE_SLAVE_UDP_PORT)
 
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]
@@ -111,6 +115,5 @@ if __name__ == '__main__':
             print("Wrong app num. Try again!")
 
     craneMaster = CraneMaster(int(cmd) - 1)
-    craneMaster.run()
     craneMaster.start_top()
 
