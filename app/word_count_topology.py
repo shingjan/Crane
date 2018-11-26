@@ -33,6 +33,23 @@ class CountBolt(Bolt):
         collector.ack(tup, rid, rid ^ tmp_tuple.uid)
 
 
+class AggregateBolt(Bolt):
+    def __init__(self):
+        super(AggregateBolt, self).__init__('CountBolt')
+        self.counts = {}
+
+    def execute(self, rid, tup, collector):
+        word = tup[0]
+        count = 0
+        if word in self.counts:
+            count = self.counts.get(word)
+        count += 1
+        self.counts[word] = count
+        tmp_tuple = Tuple((word, count))
+        collector.emit(tmp_tuple)
+        collector.ack(tup, rid, rid ^ tmp_tuple.uid)
+
+
 word_count_topology = Topology("WordCount Topology")
 word_count_topology.set_spout('README.md')
 word_count_topology.set_bolt(SplitBolt, 'shuffle')
