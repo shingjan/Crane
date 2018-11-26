@@ -18,8 +18,8 @@ class SplitBolt(Bolt):
 
 class CountBolt(Bolt):
     def __init__(self):
-        super(CountBolt, self).__init__('CountBolt')
         self.counts = {}
+        super(CountBolt, self).__init__('CountBolt')
 
     def execute(self, top_num, bolt_num, rid, tup, collector):
         word = tup
