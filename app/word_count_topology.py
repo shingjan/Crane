@@ -52,6 +52,8 @@ class AggregateBolt(Bolt):
 
 word_count_topology = Topology("WordCount Topology")
 word_count_topology.set_spout('README.md')
-word_count_topology.set_bolt(SplitBolt, 'shuffle')
-word_count_topology.set_bolt(CountBolt, 'hash')
+splitBolt = SplitBolt()
+countBolt = CountBolt()
+word_count_topology.set_bolt(splitBolt, 'shuffle')
+word_count_topology.set_bolt(countBolt, 'hash')
 
