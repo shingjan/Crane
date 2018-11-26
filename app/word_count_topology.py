@@ -5,14 +5,13 @@ class SplitBolt(Bolt):
     def __init__(self):
         super(SplitBolt, self).__init__('SplitBolt')
 
-    def execute(self, top_num, bolt_num, rid, tup, collector):
+    def execute(self, top_num, bolt_num, rid, xor_id, tup, collector):
         words = tup.split(' ')
-        xor_id = rid
         for word in words:
             tmp_tuple = Tuple(word)
             xor_id ^= tmp_tuple.uid
             # TODO: Change the hard-code next-bolt receiver to a hashed one
-            collector.emit(top_num, bolt_num + 1, tmp_tuple, tmp_tuple.uid, 0, "172.22.154.210", CRANE_SLAVE_UDP_PORT)
+            collector.emit(top_num, bolt_num + 1, tmp_tuple, rid, tmp_tuple.uid, "172.22.154.210", CRANE_SLAVE_UDP_PORT)
         collector.ack(rid, xor_id)
 
 
@@ -21,7 +20,7 @@ class CountBolt(Bolt):
         self.counts = {}
         super(CountBolt, self).__init__('CountBolt')
 
-    def execute(self, top_num, bolt_num, rid, tup, collector):
+    def execute(self, top_num, bolt_num, rid, xor_id, tup, collector):
         word = tup
         count = 0
         if word in self.counts:
@@ -30,7 +29,7 @@ class CountBolt(Bolt):
         self.counts[word] = count
         tmp_tuple = Tuple((word, count))
         collector.emit(top_num, bolt_num, tmp_tuple, tmp_tuple.uid, 0, "172.22.154.209", CRANE_AGGREGATOR_PORT)
-        collector.ack(rid, rid)
+        collector.ack(rid, xor_id)
 
 
 class AggregateBolt(Bolt):

@@ -62,8 +62,9 @@ class CraneSlave:
         bolt_num = msg['bolt']
         tup = msg['tup']
         rid = msg['rid']
+        xor_id = msg['xor_id']
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
-        curr_bolt.execute(top_num, bolt_num, rid, tup, self.collector)
+        curr_bolt.execute(top_num, bolt_num, rid, xor_id, tup, self.collector)
 
 
 if __name__ == '__main__':

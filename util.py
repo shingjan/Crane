@@ -6,7 +6,7 @@ class Bolt:
         self.next_bolt = None
         self.bolt_type = bolt_type
 
-    def execute(self, top_num, bolt_num, rid, tup, collector):
+    def execute(self, top_num, bolt_num, rid, xor_id, tup, collector):
         pass
 
 
