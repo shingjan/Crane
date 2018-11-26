@@ -22,13 +22,11 @@ class Collector:
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def emit(self, tup):
-        print('slave emit stage')
-        self._unicast(None, None, tup.tup, None, None, self.leader, CRANE_AGGREGATOR_PORT)
+    def emit(self, top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port):
+        self._unicast(top_num, bolt_num, big_tup.tup, rid, xor_id, recv_ip, recv_port)
 
-    def ack(self, tup, rid, xor_id):
-        print('slave ack stage')
-        self._unicast(None, None, tup, rid, xor_id, self.leader, CRANE_MASTER_UDP_PORT)
+    def ack(self, rid, xor_id):
+        self._unicast(None, None, None, rid, xor_id, self.leader, CRANE_MASTER_UDP_PORT)
 
 
 class CraneSlave:
@@ -63,7 +61,6 @@ class CraneSlave:
         top_num = msg['topology']
         bolt_num = msg['bolt']
         tup = msg['tup']
-        print(tup)
         rid = msg['rid']
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
         curr_bolt.execute(curr_bolt, rid, tup, self.collector)

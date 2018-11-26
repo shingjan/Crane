@@ -24,7 +24,7 @@ class CraneMaster:
         self.prefix = "MASTER - [INFO]: "
         self.slaves = [list(IP_LIST.keys())[i] for i in range(1, 10)]
         self.root_tup_ts_dict = {}
-        self.final_result = []
+        self.final_result = {}
 
         # Multi thread
         self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
@@ -70,7 +70,7 @@ class CraneMaster:
             try:
                 message, addr = self.aggregator_socket.recvfrom(65535)
                 msg = pk.loads(message)
-                self.final_result.append(msg['tup'])
+                self.final_result[msg['tup'][0]] = msg['tup'][1]
             except socket.timeout:
                 continue
 
