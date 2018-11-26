@@ -25,6 +25,7 @@ class CraneMaster:
         self.slaves = [list(IP_LIST.keys())[i] for i in range(1, 10)]
         self.root_tup_ts_dict = {}
         self.final_result = {}
+        self.is_running = True
 
         # Multi thread
         self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
@@ -34,7 +35,7 @@ class CraneMaster:
         self.aggregator_thread.start()
 
     def udp_recevier(self):
-        while True:
+        while self.is_running:
             try:
                 message, addr = self.udp_receiver_socket.recvfrom(65535)
                 msg = pk.loads(message)
@@ -45,7 +46,7 @@ class CraneMaster:
                 continue
 
     def crane_monitor(self):
-        while True:
+        while self.is_running:
             time.sleep(3)
             finished = 0
             for rid in list(self.root_tup_ts_dict):
@@ -63,10 +64,10 @@ class CraneMaster:
             if finished == len(self.root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
                 print(self.final_result)
-                break
+                self.is_running = False
 
     def crane_aggregator(self):
-        while True:
+        while self.is_running:
             try:
                 message, addr = self.aggregator_socket.recvfrom(65535)
                 msg = pk.loads(message)
