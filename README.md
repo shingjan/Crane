@@ -1,11 +1,13 @@
 # mp4-ys26-weilinz2
 
-Run server/client on each node
+Run Crane master/slave on each node
 
 ~~~
-python3 dfsServer.py
-python3 dfsClient.py
+python3 crane_master.py
+python3 crane_slave.py
 ~~~
+
+## DFS & MMP cmds
 
 List all members in local list as well as its three neighbors
 
