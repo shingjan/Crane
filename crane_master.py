@@ -71,7 +71,7 @@ class CraneMaster:
             try:
                 message, addr = self.aggregator_socket.recvfrom(65535)
                 msg = pk.loads(message)
-                self.final_result[msg['tup'][0]] = msg['tup'][1]
+                self.final_result[msg['tup'].tup[0]] = msg['tup'].tup[1]
             except socket.timeout:
                 continue
 
