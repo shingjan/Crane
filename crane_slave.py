@@ -23,7 +23,7 @@ class Collector:
         skt.close()
 
     def emit(self, top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port):
-        self._unicast(top_num, bolt_num, big_tup.tup, rid, xor_id, recv_ip, recv_port)
+        self._unicast(top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port)
 
     def ack(self, rid, xor_id):
         self._unicast(None, None, None, rid, xor_id, self.leader, CRANE_MASTER_UDP_PORT)
