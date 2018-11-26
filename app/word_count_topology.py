@@ -21,7 +21,7 @@ class CountBolt(Bolt):
         super(CountBolt, self).__init__('CountBolt')
 
     def execute(self, top_num, bolt_num, rid, xor_id, tup, collector):
-        word = tup
+        word = tup.tup
         count = 0
         if word in self.counts:
             count = self.counts.get(word)
