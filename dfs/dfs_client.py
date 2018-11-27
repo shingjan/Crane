@@ -2,7 +2,7 @@ import socket
 import pickle as pk
 import time
 import os
-from dfs.env import IP_LIST, CLIENT_TCP_PORT, DFS_TCP_PORT, UDP_SOCKET, UDP_LS_SOCKET, UDP_RECV_SOCKET, UDP_REQ_SOCKET
+from .env import IP_LIST, CLIENT_TCP_PORT, DFS_TCP_PORT, UDP_SOCKET, UDP_LS_SOCKET, UDP_RECV_SOCKET, UDP_REQ_SOCKET
 
 
 class DfsClient:

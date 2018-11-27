@@ -5,7 +5,7 @@ import os
 import pickle as pk
 import threading
 import select
-from dfs.env import IP_LIST, MMP_TCP_PORT
+from .env import IP_LIST, MMP_TCP_PORT
 
 
 class MmpServer:
