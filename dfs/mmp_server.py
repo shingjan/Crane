@@ -8,12 +8,9 @@ import select
 from dfs.env import IP_LIST, MMP_TCP_PORT
 
 
-#import glob
-
-
 class MmpServer:
-    def __init__(self):
-        self.membership_list = []
+    def __init__(self, membership_list):
+        self.membership_list = membership_list
         self.neighbors = []
         self.ip_list = IP_LIST
 
@@ -123,7 +120,8 @@ class MmpServer:
         new_leader = None
         if not member_hosts:
             self.leader = self.local_ip
-            self.membership_list = [(self.local_ip, time.time())]
+            self.membership_list.clear()
+            self.membership_list.append((self.local_ip, time.time()))
         for i in member_hosts:
             if self.ip_list[i] < m:
                 m = self.ip_list[i]
@@ -163,7 +161,7 @@ class MmpServer:
                 message1, addr1 = self.mmp_socket_dict['mmp'][0].recvfrom(65536)
                 msg1 = pk.loads(message1)
                 self.logger.info("Updating mmp list from leader: " + msg1['ip'])
-                self.membership_list = msg1['data']
+                self.membership_list.extend(msg1['data'])
                 self._update_neighbors()
             except socket.timeout:
                 self.logger.info("No response from leader. Abort")
@@ -180,7 +178,7 @@ class MmpServer:
         self._multicast('decommission', (self.local_ip, time.time()),
                         [i[0] for i in self.membership_list if i[0] != self.local_ip],
                         9000 + self.mmp_socket_dict['decommission'][1], True)
-        self.membership_list = []
+        self.membership_list.clear()
         self.neighbors = []
         self.leader = None
         self.is_running = False
@@ -369,9 +367,9 @@ class MmpServer:
 
 
 if __name__ == '__main__':
-    mmpServer = MmpServer()
+    mmpServer = MmpServer([])
     if mmpServer.start_join():
         mmpServer.run()
-        mmpServer.terminate()
+        #mmpServer.terminate()
     else:
         print("mmp server not properly configured. Exit")

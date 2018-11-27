@@ -1,6 +1,7 @@
 import pickle as pk
 import threading
 import socket
+from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
 from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
 
@@ -30,7 +31,8 @@ class Collector:
 
 
 class CraneSlave:
-    def __init__(self):
+    def __init__(self, mmp):
+        self.membership_list = mmp
         self.topology_list = [word_count_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
@@ -68,6 +70,12 @@ class CraneSlave:
 
 
 if __name__ == '__main__':
-    craneSlave = CraneSlave()
+    mmp = []
+    mmpServer = MmpServer(mmp)
+    if mmpServer.start_join():
+        mmpServer.run()
+    else:
+        print('SLAVE - [INFO]: mmp server not configured properly. Abort!')
+    craneSlave = CraneSlave(mmp)
     craneSlave.run()
     craneSlave.terminate()
