@@ -48,7 +48,7 @@ class CraneMaster:
 
     def crane_monitor(self):
         while self.is_running:
-            time.sleep(3)
+            #time.sleep(3)
             finished = 0
             for rid in list(self.root_tup_ts_dict):
                 tup = self.root_tup_ts_dict[rid][0]
