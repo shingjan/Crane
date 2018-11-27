@@ -6,6 +6,7 @@ class SplitBolt(Bolt):
         super(SplitBolt, self).__init__('SplitBolt')
 
     def execute(self, top_num, bolt_num, rid, xor_id, tup, collector):
+        tup = tup.replace("\n", "")
         words = tup.split(' ')
         for word in words:
             tmp_tuple = Tuple(word)
