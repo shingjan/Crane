@@ -124,8 +124,9 @@ if __name__ == '__main__':
             break
         else:
             print("Wrong app num. Try again!")
-
+    start_time = time.time()
     craneMaster = CraneMaster(int(cmd) - 1)
     craneMaster.start_top()
     craneMaster.termiante()
+    print('Our app use ', time.time() - start_time - 2, ' seconds')
 
