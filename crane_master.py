@@ -65,7 +65,8 @@ class CraneMaster:
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
-                print(self.final_result)
+                for k, v in self.final_result.items():
+                    print(k, v)
                 self.is_running = False
 
     def crane_aggregator(self):
