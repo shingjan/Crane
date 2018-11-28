@@ -3,7 +3,7 @@ import threading
 import socket
 from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
-from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
+from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT
 
 
 class Collector:
@@ -35,7 +35,7 @@ class CraneSlave:
         self.membership_list = membership_list
         self.topology_list = [word_count_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
-        self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
+        self.udp_receiver_thread = threading.Thread(target=self.udp_recevier)
         self.udp_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_UDP_PORT))
         self.udp_receiver_socket.settimeout(2)
@@ -45,10 +45,10 @@ class CraneSlave:
         self.collector = Collector(self.leader)
 
     def run(self):
-        self.udp_recevier_thread.start()
+        self.udp_receiver_thread.start()
 
     def terminate(self):
-        self.udp_recevier_thread.join()
+        self.udp_receiver_thread.join()
 
     def udp_recevier(self):
         while True:

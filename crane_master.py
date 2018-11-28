@@ -4,7 +4,8 @@ import socket
 import time
 from app.word_count_topology import word_count_topology
 from dfs.env import INDEX_LIST
-from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, CRANE_MAX_INTERVAL
+from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
+    CRANE_MAX_INTERVAL
 
 
 class CraneMaster:
@@ -29,13 +30,13 @@ class CraneMaster:
         self.is_running = True
 
         # Multi thread
-        self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)
+        self.udp_recevier_thread = threading.Thread(target=self.udp_receiver)
         self.monitor_thread = threading.Thread(target=self.crane_monitor)
         self.aggregator_thread = threading.Thread(target=self.crane_aggregator)
         self.udp_recevier_thread.start()
         self.aggregator_thread.start()
 
-    def udp_recevier(self):
+    def udp_receiver(self):
         while self.is_running:
             try:
                 message, addr = self.udp_receiver_socket.recvfrom(65535)
@@ -82,7 +83,7 @@ class CraneMaster:
             except socket.timeout:
                 continue
 
-    def termiante(self):
+    def terminate(self):
         self.udp_recevier_thread.join()
         self.monitor_thread.join()
         self.aggregator_thread.join()
@@ -132,11 +133,15 @@ if __name__ == '__main__':
             print('Submitting Application: <WordCount> ......')
             time.sleep(1)
             break
+        elif cmd == '2':
+            print('Submitting Application: <TwitterUserFilter> ......')
+        elif cmd == '3':
+            print('Submitting Application: <DonnoWhatToDo> ......')
         else:
             print("Wrong app num. Try again!")
     start_time = time.time()
     craneMaster = CraneMaster(int(cmd) - 1)
     craneMaster.start_top()
-    craneMaster.termiante()
+    craneMaster.terminate()
     print('Our app use ', time.time() - start_time - 2, ' seconds')
 
