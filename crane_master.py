@@ -51,10 +51,11 @@ class CraneMaster:
         while self.is_running:
             time.sleep(2)
             finished = 0
-            for rid in list(self.root_tup_ts_dict):
-                tup = self.root_tup_ts_dict[rid][0]
-                time_stamp = self.root_tup_ts_dict[rid][1]
-                total_rid = self.root_tup_ts_dict[rid][2]
+            root_tup_ts_dict = self.root_tup_ts_dict.copy()
+            for rid in root_tup_ts_dict:
+                tup = root_tup_ts_dict[rid][0]
+                time_stamp = root_tup_ts_dict[rid][1]
+                total_rid = root_tup_ts_dict[rid][2]
                 if total_rid == 0:
                     finished += 1
                     continue
@@ -63,7 +64,7 @@ class CraneMaster:
                     if time_spent >= CRANE_MAX_INTERVAL:
                         print(self.prefix, 'Tuple ', tup, ' has been processed more than 30 secs. Re-running it...')
                         self.emit(tup, self.topology_num)
-            if finished == len(self.root_tup_ts_dict):
+            if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
                 print(self.final_result)
                 self.is_running = False
