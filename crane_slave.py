@@ -31,8 +31,8 @@ class Collector:
 
 
 class CraneSlave:
-    def __init__(self, mmp):
-        self.membership_list = mmp
+    def __init__(self, membership_list):
+        self.membership_list = membership_list
         self.topology_list = [word_count_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.udp_recevier_thread = threading.Thread(target=self.udp_recevier)

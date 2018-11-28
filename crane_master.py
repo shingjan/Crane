@@ -118,12 +118,6 @@ class CraneMaster:
 
 
 if __name__ == '__main__':
-    mmp = []
-    mmpServer = MmpServer(mmp)
-    if mmpServer.start_join():
-        mmpServer.run()
-    else:
-        print('MASTER - [INFO]: mmp server not configured properly. Abort!')
     while True:
         cmd = input("There are three applications available: WordCount, "
                     "TwitterUserFilter, Banana. Enter 1-3 to run one of them: ")
