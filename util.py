@@ -50,7 +50,7 @@ class TupleBatch:
         self.uid = 0
 
     def add_tuple(self, big_tuple):
-        self.tuple_list.append(big_tuple.tup)
+        self.tuple_list.append(big_tuple)
         self.uid ^= big_tuple.uid
 
 
