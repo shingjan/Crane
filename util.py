@@ -44,6 +44,16 @@ class Tuple:
         self.uid = uuid.uuid4().int
 
 
+class TupleBatch:
+    def __init__(self):
+        self.tuple_list = []
+        self.uid = 0
+
+    def add_tuple(self, big_tuple):
+        self.tuple_list.append(big_tuple.tup)
+        self.uid ^= big_tuple.uid
+
+
 CRANE_MASTER_UDP_PORT = 9527
 CRANE_SLAVE_UDP_PORT = 9528
 CRANE_AGGREGATOR_PORT = 9529

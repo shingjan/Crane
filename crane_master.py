@@ -4,8 +4,7 @@ import socket
 import time
 from app.word_count_topology import word_count_topology
 from dfs.env import INDEX_LIST
-from dfs.mmp_server import MmpServer
-from util import Tuple, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, CRANE_MAX_INTERVAL
+from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, CRANE_MAX_INTERVAL
 
 
 class CraneMaster:
@@ -74,10 +73,11 @@ class CraneMaster:
             try:
                 message, addr = self.aggregator_socket.recvfrom(65535)
                 msg = pk.loads(message)
-                big_tup = msg['tup']
-                tup = big_tup.tup
-                print(self.prefix, tup)
-                self.final_result[tup[0]] = tup[1]
+                tuple_batch = msg['tup']
+                for big_tup in tuple_batch.tuple_list:
+                    tup = big_tup.tup
+                    print(self.prefix, tup)
+                    self.final_result[tup[0]] = tup[1]
             except socket.timeout:
                 continue
 
@@ -99,21 +99,26 @@ class CraneMaster:
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def emit(self, tup, top_num):
-        # print(tup)
-        big_tuple = Tuple(tup)
-        self.root_tup_ts_dict[big_tuple.uid] = [tup, time.time(), big_tuple.uid]
+    def emit(self, tuple_batch, top_num):
+        self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
         # Send to VM3 for testing purposes
-        self._unicast(top_num, 0, tup, big_tuple.uid, big_tuple.uid, "172.22.156.209", CRANE_SLAVE_UDP_PORT)
+        self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid, "172.22.156.209", CRANE_SLAVE_UDP_PORT)
 
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]
-        print(curr_top.name, " starting...")
+        print(self.prefix, curr_top.name, " starting...")
+        tuple_batch = TupleBatch()
         while True:
             tup = curr_top.spout.next_tup()
             if not tup:
+                self.emit(tuple_batch, self.topology_num)
                 break
-            self.emit(tup, self.topology_num)
+            else:
+                big_tuple = Tuple(tup)
+                tuple_batch.add_tuple(big_tuple)
+                if len(tuple_batch.tuple_list) == 100:
+                    self.emit(tuple_batch, self.topology_num)
+                    tuple_batch = TupleBatch()
         print(self.prefix + 'All tuples transmitted. Spout closed down.')
         self.monitor_thread.start()
 

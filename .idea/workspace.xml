@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="" />
+    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app/word_count_topology.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/word_count_topology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crane_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/crane_master.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crane_slave.py" beforeDir="false" afterPath="$PROJECT_DIR$/crane_slave.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/util.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +43,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="md" value="65" />
-          <entry key="py" value="10092" />
+          <entry key="py" value="10828" />
           <entry key="sh" value="33" />
           <entry key="topology" value="124" />
         </counts>
@@ -48,7 +53,7 @@
           <entry key="Bash" value="1" />
           <entry key="Markdown" value="65" />
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="10216" />
+          <entry key="Python" value="10952" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -60,30 +65,30 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+            <state relative-caret-position="388">
+              <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
               <folding>
-                <marker date="1543261713425" expanded="true" signature="225:509" ph="..." />
-                <marker date="1543261713425" expanded="true" signature="328:462" ph="..." />
-                <marker date="1543261713425" expanded="true" signature="678:720" ph="..." />
-                <marker date="1543261713425" expanded="true" signature="804:895" ph="..." />
+                <marker date="1543372144301" expanded="true" signature="225:509" ph="..." />
+                <marker date="1543372144301" expanded="true" signature="328:462" ph="..." />
+                <marker date="1543372144301" expanded="true" signature="678:720" ph="..." />
+                <marker date="1543372144301" expanded="true" signature="912:1106" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crane_master.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="116" column="23" lean-forward="true" selection-start-line="116" selection-start-column="23" selection-end-line="116" selection-end-column="23" />
+            <state relative-caret-position="-41">
+              <caret line="54" column="19" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <marker date="1543362775157" expanded="true" signature="318:323" ph="..." />
-                <marker date="1543362775157" expanded="true" signature="2910:3291" ph="..." />
-                <marker date="1543362775157" expanded="true" signature="3317:3436" ph="..." />
-                <marker date="1543362775157" expanded="true" signature="3863:4154" ph="..." />
-                <marker date="1543362775157" expanded="true" signature="4231:4506" ph="..." />
+                <marker date="1543372144320" expanded="true" signature="293:298" ph="..." />
+                <marker date="1543372144320" expanded="true" signature="2914:3295" ph="..." />
+                <marker date="1543372144320" expanded="true" signature="3321:3440" ph="..." />
+                <marker date="1543372144320" expanded="true" signature="3875:4138" ph="..." />
+                <marker date="1543372144320" expanded="true" signature="4215:4820" ph="..." />
               </folding>
             </state>
           </provider>
@@ -102,25 +107,25 @@
         <entry file="file://$PROJECT_DIR$/crane_slave.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="283">
-              <caret line="34" column="46" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="46" />
+              <caret line="68" column="69" selection-start-line="68" selection-start-column="69" selection-end-line="68" selection-end-column="69" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <marker date="1543364779348" expanded="true" signature="246:995" ph="..." />
-                <marker date="1543364779348" expanded="true" signature="278:279" ph="..." />
-                <marker date="1543364779348" expanded="true" signature="278:313" ph="..." />
-                <marker date="1543364779348" expanded="true" signature="278:711" ph="..." />
+                <marker date="1543372978970" expanded="true" signature="246:995" ph="..." />
+                <marker date="1543372978970" expanded="true" signature="278:279" ph="..." />
+                <marker date="1543372978970" expanded="true" signature="278:313" ph="..." />
+                <marker date="1543372978970" expanded="true" signature="278:711" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="54" column="23" lean-forward="true" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
+            <state relative-caret-position="402">
+              <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
               <folding>
-                <marker date="1543366086089" expanded="true" signature="1685:1688" ph="..." />
+                <marker date="1543373964008" expanded="true" signature="1546:1548" ph="..." />
               </folding>
             </state>
           </provider>
@@ -149,6 +154,7 @@
       <find>membership_list</find>
       <find>_elect</find>
       <find>print</find>
+      <find>root_tup</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -169,17 +175,17 @@
         <option value="$PROJECT_DIR$/venv/crane_master.py" />
         <option value="$PROJECT_DIR$/word_count_topology.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/util.py" />
         <option value="$PROJECT_DIR$/dfs/__init__.py" />
         <option value="$PROJECT_DIR$/dfs/dfs_server.py" />
         <option value="$PROJECT_DIR$/dfs/dfs_client.py" />
         <option value="$PROJECT_DIR$/dfs/mmp_server.py" />
-        <option value="$PROJECT_DIR$/crane_slave.py" />
         <option value="$PROJECT_DIR$/setup.sh" />
         <option value="$PROJECT_DIR$/twitteruser50.csv" />
         <option value="$PROJECT_DIR$/app/twitter_user_filter.py" />
-        <option value="$PROJECT_DIR$/app/word_count_topology.py" />
+        <option value="$PROJECT_DIR$/util.py" />
         <option value="$PROJECT_DIR$/crane_master.py" />
+        <option value="$PROJECT_DIR$/crane_slave.py" />
+        <option value="$PROJECT_DIR$/app/word_count_topology.py" />
       </list>
     </option>
   </component>
@@ -261,7 +267,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2536349" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -395,19 +400,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
-          <folding>
-            <marker date="1543261713425" expanded="true" signature="225:509" ph="..." />
-            <marker date="1543261713425" expanded="true" signature="328:462" ph="..." />
-            <marker date="1543261713425" expanded="true" signature="678:720" ph="..." />
-            <marker date="1543261713425" expanded="true" signature="804:895" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -436,6 +428,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
+          <folding>
+            <marker date="1543372144301" expanded="true" signature="225:509" ph="..." />
+            <marker date="1543372144301" expanded="true" signature="328:462" ph="..." />
+            <marker date="1543372144301" expanded="true" signature="678:720" ph="..." />
+            <marker date="1543372144301" expanded="true" signature="912:1106" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dfs/mmp_server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -446,38 +451,38 @@
     <entry file="file://$PROJECT_DIR$/crane_slave.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
-          <caret line="34" column="46" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="46" />
+          <caret line="68" column="69" selection-start-line="68" selection-start-column="69" selection-end-line="68" selection-end-column="69" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-            <marker date="1543364779348" expanded="true" signature="246:995" ph="..." />
-            <marker date="1543364779348" expanded="true" signature="278:279" ph="..." />
-            <marker date="1543364779348" expanded="true" signature="278:313" ph="..." />
-            <marker date="1543364779348" expanded="true" signature="278:711" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="54" column="23" lean-forward="true" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
-          <folding>
-            <marker date="1543366086089" expanded="true" signature="1685:1688" ph="..." />
+            <marker date="1543372978970" expanded="true" signature="246:995" ph="..." />
+            <marker date="1543372978970" expanded="true" signature="278:279" ph="..." />
+            <marker date="1543372978970" expanded="true" signature="278:313" ph="..." />
+            <marker date="1543372978970" expanded="true" signature="278:711" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/crane_master.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="116" column="23" lean-forward="true" selection-start-line="116" selection-start-column="23" selection-end-line="116" selection-end-column="23" />
+        <state relative-caret-position="-41">
+          <caret line="54" column="19" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-            <marker date="1543362775157" expanded="true" signature="318:323" ph="..." />
-            <marker date="1543362775157" expanded="true" signature="2910:3291" ph="..." />
-            <marker date="1543362775157" expanded="true" signature="3317:3436" ph="..." />
-            <marker date="1543362775157" expanded="true" signature="3863:4154" ph="..." />
-            <marker date="1543362775157" expanded="true" signature="4231:4506" ph="..." />
+            <marker date="1543372144320" expanded="true" signature="293:298" ph="..." />
+            <marker date="1543372144320" expanded="true" signature="2914:3295" ph="..." />
+            <marker date="1543372144320" expanded="true" signature="3321:3440" ph="..." />
+            <marker date="1543372144320" expanded="true" signature="3875:4138" ph="..." />
+            <marker date="1543372144320" expanded="true" signature="4215:4820" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
+          <folding>
+            <marker date="1543373964008" expanded="true" signature="1546:1548" ph="..." />
           </folding>
         </state>
       </provider>
