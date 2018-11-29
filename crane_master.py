@@ -4,6 +4,7 @@ import socket
 import time
 import random
 from copy import deepcopy
+import _pickle as cpk
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.third_app import twitter_user_filter_topology
@@ -56,10 +57,10 @@ class CraneMaster:
     def crane_monitor(self):
         while self.is_running:
             print(self.prefix, "A scan begins...")
-            time.sleep(14)
+            # time.sleep(14)
             finished = 0
             start = time.time()
-            root_tup_ts_dict = deepcopy(self.root_tup_ts_dict)
+            root_tup_ts_dict = cpk.loads(cpk.dumps(self.root_tup_ts_dict))
             print(time.time() - start)
             for rid in root_tup_ts_dict:
                 tup = root_tup_ts_dict[rid][0]
