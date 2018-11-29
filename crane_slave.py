@@ -44,7 +44,7 @@ class CraneSlave:
 
         self.leader = '172.22.158.208'
         self.prefix = "SLAVE - [INFO]: "
-        self.collector = Collector(self.leader)
+        self.collector = Collector(self.membership_list)
 
     def run(self):
         self.udp_receiver_thread.start()
