@@ -356,7 +356,6 @@ class MmpServer:
         elif message['cmd'] == 'leader':
             self.leader = message['ip']
             self._update_neighbors()
-            #self._build_file_dict()
             # TODO build file dict
 
     '''

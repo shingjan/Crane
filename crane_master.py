@@ -2,6 +2,7 @@ import pickle as pk
 import threading
 import socket
 import time
+import random
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.third_app import twitter_user_filter_topology
@@ -52,7 +53,8 @@ class CraneMaster:
 
     def crane_monitor(self):
         while self.is_running:
-            time.sleep(2)
+            time.sleep(3)
+            print(self.prefix, "A scan begins...")
             finished = 0
             root_tup_ts_dict = self.root_tup_ts_dict.copy()
             for rid in root_tup_ts_dict:
@@ -66,7 +68,7 @@ class CraneMaster:
                     time_spent = time.time() - time_stamp
                     if time_spent >= CRANE_MAX_INTERVAL:
                         print(self.prefix, 'TupleBatch', tup.uid,
-                              ' has been processed more than 30 secs. Re-running it...')
+                              ' has been processed more than ', CRANE_MAX_INTERVAL, ' secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
@@ -108,6 +110,7 @@ class CraneMaster:
     def emit(self, tuple_batch, top_num):
         self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
         # Send to VM3 for testing purposes
+        next_node_index = random.randint(0, len(self.mmp_list) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid, "172.22.156.209", CRANE_SLAVE_UDP_PORT)
 
     def start_top(self):
