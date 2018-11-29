@@ -56,9 +56,11 @@ class CraneMaster:
     def crane_monitor(self):
         while self.is_running:
             print(self.prefix, "A scan begins...")
-            #time.sleep(3)
+            time.sleep(14)
             finished = 0
+            start = time.time()
             root_tup_ts_dict = deepcopy(self.root_tup_ts_dict)
+            print(time.time() - start)
             for rid in root_tup_ts_dict:
                 tup = root_tup_ts_dict[rid][0]
                 time_stamp = root_tup_ts_dict[rid][1]
