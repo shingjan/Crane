@@ -6,13 +6,13 @@ import random
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.third_app import twitter_user_filter_topology
-from dfs.env import INDEX_LIST
+from dfs.mmp_server import MmpServer
 from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL
 
 
 class CraneMaster:
-    def __init__(self, topology_num):
+    def __init__(self, topology_num, mmp_list):
         self.topology_list = [word_count_topology, 'haha', twitter_user_filter_topology]
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
@@ -25,19 +25,20 @@ class CraneMaster:
         self.aggregator_socket.bind(('0.0.0.0', CRANE_AGGREGATOR_PORT))
         self.aggregator_socket.settimeout(2)
 
-        self.leader = '172.22.154.209'
+        self.leader = self.local_ip
         self.prefix = "MASTER - [INFO]: "
-        self.slaves = [INDEX_LIST[i] for i in range(1, 10)]
+        self.mmp_list = mmp_list
+        self.slaves = [i[0] for i in mmp_list if i[0] != self.local_ip]
         self.root_tup_ts_dict = {}
         self.final_result = {}
         self.final_result = defaultdict(int)
         self.is_running = True
 
         # Multi thread
-        self.udp_recevier_thread = threading.Thread(target=self.udp_receiver)
+        self.udp_receiver_thread = threading.Thread(target=self.udp_receiver)
         self.monitor_thread = threading.Thread(target=self.crane_monitor)
         self.aggregator_thread = threading.Thread(target=self.crane_aggregator)
-        self.udp_recevier_thread.start()
+        self.udp_receiver_thread.start()
         self.aggregator_thread.start()
 
     def udp_receiver(self):
@@ -90,7 +91,7 @@ class CraneMaster:
                 continue
 
     def terminate(self):
-        self.udp_recevier_thread.join()
+        self.udp_receiver_thread.join()
         self.monitor_thread.join()
         self.aggregator_thread.join()
 
@@ -110,8 +111,9 @@ class CraneMaster:
     def emit(self, tuple_batch, top_num):
         self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
         # Send to VM3 for testing purposes
-        next_node_index = random.randint(0, len(self.mmp_list) - 1)
-        self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid, "172.22.156.209", CRANE_SLAVE_UDP_PORT)
+        next_node_index = random.randint(0, len(self.slaves) - 1)
+        self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid,
+                      self.slaves[next_node_index], CRANE_SLAVE_UDP_PORT)
 
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]
@@ -133,6 +135,10 @@ class CraneMaster:
 
 
 if __name__ == '__main__':
+    mmp = []
+    mmpServer = MmpServer(mmp)
+    if mmpServer.start_join():
+        mmpServer.run()
     while True:
         cmd = input("There are three applications available: WordCount, "
                     "TwitterUserFilter, Banana. Enter 1-3 to run one of them: ")
@@ -149,7 +155,7 @@ if __name__ == '__main__':
         else:
             print("Wrong app num. Try again!")
     start_time = time.time()
-    craneMaster = CraneMaster(int(cmd) - 1)
+    craneMaster = CraneMaster(int(cmd) - 1, mmp)
     craneMaster.start_top()
     craneMaster.terminate()
     print('Our app use ', time.time() - start_time - 2, ' seconds')
