@@ -3,6 +3,7 @@ import threading
 import socket
 import time
 from app.word_count_topology import word_count_topology
+from app.third_app import twitter_user_filter_topology
 from dfs.env import INDEX_LIST
 from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL
@@ -10,7 +11,7 @@ from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT,
 
 class CraneMaster:
     def __init__(self, topology_num):
-        self.topology_list = [word_count_topology]
+        self.topology_list = [word_count_topology, 'haha', twitter_user_filter_topology]
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
@@ -62,7 +63,7 @@ class CraneMaster:
                 else:
                     time_spent = time.time() - time_stamp
                     if time_spent >= CRANE_MAX_INTERVAL:
-                        print(self.prefix, 'Tuple ', tup, ' has been processed more than 30 secs. Re-running it...')
+                        print(self.prefix, 'TupleBatch', tup.uid, ' has been processed more than 30 secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
@@ -137,6 +138,8 @@ if __name__ == '__main__':
             print('Submitting Application: <TwitterUserFilter> ......')
         elif cmd == '3':
             print('Submitting Application: <DonnoWhatToDo> ......')
+            time.sleep(1)
+            break
         else:
             print("Wrong app num. Try again!")
     start_time = time.time()

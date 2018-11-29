@@ -14,8 +14,8 @@ hostname = ["fa18-cs425-g63-01.cs.illinois.edu",
             "fa18-cs425-g63-10.cs.illinois.edu"]
 
 port = 22
-username = getpass.getpass('Username:')
-password = getpass.getpass('Password:')
+username = getpass.getpass('Username: ')
+password = getpass.getpass('Password: ')
 command = 'cd mp4-ys26-weilinz2/ && ./setup.sh'
 
 for i in range(len(hostname)):
