@@ -38,6 +38,7 @@ class CountBolt(Bolt):
                 count = self.counts.get(word)
             count += 1
             self.counts[word] = count
+        for word, count in self.counts.items():
             tmp_tuple = Tuple((word, count))
             new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0,
