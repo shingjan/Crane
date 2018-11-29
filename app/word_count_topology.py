@@ -42,7 +42,7 @@ class CountBolt(Bolt):
             tmp_tuple = Tuple((word, count))
             new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0,
-                       '172.22.154.209', CRANE_AGGREGATOR_PORT)
+                       mmp_list[0][0], CRANE_AGGREGATOR_PORT)
         collector.ack(rid, xor_id)
         self.counts.clear()
 

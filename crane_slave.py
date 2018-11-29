@@ -8,8 +8,8 @@ from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT
 
 
 class Collector:
-    def __init__(self, leader):
-        self.leader = leader
+    def __init__(self, mmp_list):
+        self.mmp_list = mmp_list
 
     def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,7 +28,8 @@ class Collector:
         self._unicast(top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port)
 
     def ack(self, rid, xor_id):
-        self._unicast(None, None, None, rid, xor_id, self.leader, CRANE_MASTER_UDP_PORT)
+        leader = self.mmp_list[0][0]
+        self._unicast(None, None, None, rid, xor_id, leader, CRANE_MASTER_UDP_PORT)
 
 
 class CraneSlave:
@@ -41,7 +42,7 @@ class CraneSlave:
         self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_UDP_PORT))
         self.udp_receiver_socket.settimeout(2)
 
-        self.leader = '172.22.154.209'
+        self.leader = '172.22.158.208'
         self.prefix = "SLAVE - [INFO]: "
         self.collector = Collector(self.leader)
 
