@@ -2,6 +2,7 @@ import pickle as pk
 import threading
 import socket
 import time
+from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.third_app import twitter_user_filter_topology
 from dfs.env import INDEX_LIST
@@ -28,6 +29,7 @@ class CraneMaster:
         self.slaves = [INDEX_LIST[i] for i in range(1, 10)]
         self.root_tup_ts_dict = {}
         self.final_result = {}
+        self.final_result = defaultdict(int)
         self.is_running = True
 
         # Multi thread
