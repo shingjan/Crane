@@ -79,7 +79,7 @@ class CraneMaster:
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
                     print(self.prefix, tup)
-                    self.final_result[tup[0]] = tup[1]
+                    self.final_result[tup[0]] += tup[1]
             except socket.timeout:
                 continue
 

@@ -1,3 +1,4 @@
+import random
 from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
 
 
@@ -5,8 +6,9 @@ class SplitBolt(Bolt):
     def __init__(self):
         super(SplitBolt, self).__init__('SplitBolt')
 
-    def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector):
+    def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
+        next_node_index = random.randint(0, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
@@ -16,8 +18,8 @@ class SplitBolt(Bolt):
                 xor_id ^= tmp_tuple.uid
                 new_tuple_batch.add_tuple(tmp_tuple)
                 # TODO: Change the hard-code next-bolt receiver to a hashed one
-        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, new_tuple_batch.uid, "172.22.154.210",
-                       CRANE_SLAVE_UDP_PORT)
+        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, new_tuple_batch.uid,
+                       mmp_list[next_node_index][0], CRANE_SLAVE_UDP_PORT)
         collector.ack(rid, xor_id)
 
 
@@ -26,8 +28,9 @@ class CountBolt(Bolt):
         self.counts = {}
         super(CountBolt, self).__init__('CountBolt')
 
-    def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector):
+    def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
+        # next_node_index = random.randint(0, len(mmp_list) - 1)
         for big_tuple in tuple_batch.tuple_list:
             word = big_tuple.tup
             count = 0
@@ -37,8 +40,10 @@ class CountBolt(Bolt):
             self.counts[word] = count
             tmp_tuple = Tuple((word, count))
             new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0, "172.22.154.209", CRANE_AGGREGATOR_PORT)
+        collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0,
+                       '172.22.154.209', CRANE_AGGREGATOR_PORT)
         collector.ack(rid, xor_id)
+        self.counts.clear()
 
 
 word_count_topology = Topology("WordCount Topology")
