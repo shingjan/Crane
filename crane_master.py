@@ -3,6 +3,7 @@ import threading
 import socket
 import time
 from app.word_count_topology import word_count_topology
+from app.third_app import twitter_user_filter_topology
 from dfs.env import INDEX_LIST
 from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL
@@ -10,7 +11,7 @@ from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT,
 
 class CraneMaster:
     def __init__(self, topology_num):
-        self.topology_list = [word_count_topology]
+        self.topology_list = [word_count_topology, 'haha', twitter_user_filter_topology]
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
