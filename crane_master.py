@@ -65,7 +65,8 @@ class CraneMaster:
                 else:
                     time_spent = time.time() - time_stamp
                     if time_spent >= CRANE_MAX_INTERVAL:
-                        print(self.prefix, 'TupleBatch', tup.uid, ' has been processed more than 30 secs. Re-running it...')
+                        print(self.prefix, 'TupleBatch', tup.uid,
+                              ' has been processed more than 30 secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching results...')
@@ -99,7 +100,7 @@ class CraneMaster:
             'tup': tup,
             'rid': rid,
             'xor_id': xor_id,
-            'terminal': False
+            'master': self.local_ip
         })
         skt.sendto(packet, (ip, port))
         skt.close()

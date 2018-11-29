@@ -30,7 +30,6 @@ class CountBolt(Bolt):
 
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        # next_node_index = random.randint(0, len(mmp_list) - 1)
         for big_tuple in tuple_batch.tuple_list:
             word = big_tuple.tup
             count = 0
@@ -42,7 +41,7 @@ class CountBolt(Bolt):
             tmp_tuple = Tuple((word, count))
             new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0,
-                       mmp_list[0][0], CRANE_AGGREGATOR_PORT)
+                       collector.master, CRANE_AGGREGATOR_PORT)
         collector.ack(rid, xor_id)
         self.counts.clear()
 

@@ -8,8 +8,8 @@ from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT
 
 
 class Collector:
-    def __init__(self, mmp_list):
-        self.mmp_list = mmp_list
+    def __init__(self, master):
+        self.master = master
 
     def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -19,17 +19,20 @@ class Collector:
             'tup': tup,
             'rid': rid,
             'xor_id': xor_id,
-            'terminal': False
+            'master': self.master
         })
         skt.sendto(packet, (ip, port))
         skt.close()
 
+    def set_master(self, master):
+        self.master = master
+
     def emit(self, top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port):
+        print('emit message to', recv_ip)
         self._unicast(top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port)
 
     def ack(self, rid, xor_id):
-        leader = self.mmp_list[0][0]
-        self._unicast(None, None, None, rid, xor_id, leader, CRANE_MASTER_UDP_PORT)
+        self._unicast(None, None, None, rid, xor_id, self.master, CRANE_MASTER_UDP_PORT)
 
 
 class CraneSlave:
@@ -42,9 +45,9 @@ class CraneSlave:
         self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_UDP_PORT))
         self.udp_receiver_socket.settimeout(2)
 
-        self.leader = '172.22.158.208'
+        self.master = None
         self.prefix = "SLAVE - [INFO]: "
-        self.collector = Collector(self.membership_list)
+        self.collector = Collector(None)
 
     def run(self):
         self.udp_receiver_thread.start()
@@ -67,6 +70,9 @@ class CraneSlave:
         tuple_batch = msg['tup']
         rid = msg['rid']
         xor_id = msg['xor_id']
+        master_ip = msg['master']
+        self.master = master_ip
+        self.collector.set_master(master_ip)
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
         curr_bolt.execute(top_num, bolt_num, rid, xor_id, tuple_batch, self.collector, self.membership_list)
 
