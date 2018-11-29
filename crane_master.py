@@ -137,6 +137,8 @@ if __name__ == '__main__':
             print('Submitting Application: <TwitterUserFilter> ......')
         elif cmd == '3':
             print('Submitting Application: <DonnoWhatToDo> ......')
+            time.sleep(1)
+            break
         else:
             print("Wrong app num. Try again!")
     start_time = time.time()
