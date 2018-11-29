@@ -56,7 +56,7 @@ class CraneMaster:
     def crane_monitor(self):
         while self.is_running:
             print(self.prefix, "A scan begins...")
-            time.sleep(3)
+            #time.sleep(3)
             finished = 0
             root_tup_ts_dict = deepcopy(self.root_tup_ts_dict)
             for rid in root_tup_ts_dict:
