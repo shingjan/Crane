@@ -138,7 +138,7 @@ if __name__ == '__main__':
     mmp = []
     mmpServer = MmpServer(mmp)
     if mmpServer.start_join():
-        mmpServer.run()
+        mmpServer.run_without_cmd()
     while True:
         cmd = input("There are three applications available: WordCount, "
                     "TwitterUserFilter, Banana. Enter 1-3 to run one of them: ")

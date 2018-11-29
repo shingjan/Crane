@@ -75,6 +75,11 @@ class MmpServer:
         self.mmp_tcp_receiver.start()
         self.mmp_cmd.start()
 
+    def run_without_cmd(self):
+        self.mmp_receiver.start()
+        self.mmp_sender.start()
+        self.mmp_tcp_receiver.start()
+
     def terminate(self):
         self.mmp_receiver.join()
         self.mmp_sender.join()
