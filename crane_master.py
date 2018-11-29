@@ -3,6 +3,7 @@ import threading
 import socket
 import time
 import random
+from copy import deepcopy
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.third_app import twitter_user_filter_topology
@@ -54,10 +55,10 @@ class CraneMaster:
 
     def crane_monitor(self):
         while self.is_running:
-            time.sleep(3)
             print(self.prefix, "A scan begins...")
+            time.sleep(3)
             finished = 0
-            root_tup_ts_dict = self.root_tup_ts_dict.copy()
+            root_tup_ts_dict = deepcopy(self.root_tup_ts_dict)
             for rid in root_tup_ts_dict:
                 tup = root_tup_ts_dict[rid][0]
                 time_stamp = root_tup_ts_dict[rid][1]
