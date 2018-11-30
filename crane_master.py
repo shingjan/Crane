@@ -57,7 +57,6 @@ class CraneMaster:
     def crane_monitor(self):
         while self.is_running:
             print(self.prefix, "A scan begins...")
-            # time.sleep(14)
             finished = 0
             start = time.time()
             root_tup_ts_dict = cpk.loads(cpk.dumps(self.root_tup_ts_dict))
