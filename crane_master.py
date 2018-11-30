@@ -58,9 +58,8 @@ class CraneMaster:
         while self.is_running:
             print(self.prefix, "A scan begins...")
             finished = 0
-            start = time.time()
             root_tup_ts_dict = cpk.loads(cpk.dumps(self.root_tup_ts_dict))
-            print(time.time() - start)
+            self.print_result()
             for rid in root_tup_ts_dict:
                 tup = root_tup_ts_dict[rid][0]
                 time_stamp = root_tup_ts_dict[rid][1]
@@ -75,9 +74,8 @@ class CraneMaster:
                               ' has been processed more than ', CRANE_MAX_INTERVAL, ' secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
-                print(self.prefix, 'All tuples has been fully processed. Fetching results...')
-                for k, v in self.final_result.items():
-                    print(k, v)
+                print(self.prefix, 'All tuples has been fully processed. Fetching final results...')
+                self.print_result()
                 self.is_running = False
 
     def crane_aggregator(self):
@@ -88,7 +86,6 @@ class CraneMaster:
                 tuple_batch = msg['tup']
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
-                    print(self.prefix, tup)
                     self.final_result[tup[0]] += tup[1]
             except socket.timeout:
                 continue
@@ -135,6 +132,10 @@ class CraneMaster:
                     tuple_batch = TupleBatch()
         print(self.prefix + 'All tuples transmitted. Spout closed down.')
         self.monitor_thread.start()
+
+    def print_result(self):
+        for k, v in self.final_result:
+            print(self.prefix, k, ' --- ', v)
 
 
 if __name__ == '__main__':
