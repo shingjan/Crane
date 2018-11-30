@@ -10,11 +10,13 @@ class ParseNeighborsBolt(Bolt):
         next_node_index = random.randint(0, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
+            print(tup)
             tup = tup.replace("\n", "")
             url_list = tup.split('\t')
             urls = [url_list[i] for i in range(len(url_list)) if i != 0]
             weight = len(urls)
             for url in urls:
+
                 tmp_tuple = Tuple((url, 1/weight))
                 xor_id ^= tmp_tuple.uid
                 new_tuple_batch.add_tuple(tmp_tuple)
@@ -31,7 +33,6 @@ class ComputeContribsBolt(Bolt):
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
         for big_tup in tuple_batch.tuple_list:
-            print(big_tup.tup)
             url, rank = big_tup.tup
             if url in self.ranks:
                 rank += self.ranks.get(url)
