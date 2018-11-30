@@ -134,7 +134,8 @@ class CraneMaster:
         self.monitor_thread.start()
 
     def print_result(self):
-        for k, v in self.final_result.items():
+        final_result = cpk.loads(cpk.dumps(self.final_result))
+        for k, v in final_result.items():
             print(self.prefix, k, ' --- ', v)
 
 
