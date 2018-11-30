@@ -7,7 +7,8 @@ from copy import deepcopy
 import _pickle as cpk
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
-from app.third_app import twitter_user_filter_topology
+from app.page_rank_topology import page_rank_topology
+from app.twitter_user_filter import twitter_user_filter_topology
 from dfs.mmp_server import MmpServer
 from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL
@@ -15,7 +16,7 @@ from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT,
 
 class CraneMaster:
     def __init__(self, topology_num, mmp_list):
-        self.topology_list = [word_count_topology, 'haha', twitter_user_filter_topology]
+        self.topology_list = [word_count_topology, page_rank_topology, twitter_user_filter_topology]
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
@@ -152,9 +153,11 @@ if __name__ == '__main__':
             time.sleep(1)
             break
         elif cmd == '2':
-            print('Submitting Application: <TwitterUserFilter> ......')
+            print('Submitting Application: <PageRank> ......')
+            time.sleep(1)
+            break
         elif cmd == '3':
-            print('Submitting Application: <DonnoWhatToDo> ......')
+            print('Submitting Application: <TwitterUserFilter> ......')
             time.sleep(1)
             break
         else:

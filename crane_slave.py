@@ -3,7 +3,8 @@ import threading
 import socket
 from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
-from app.third_app import twitter_user_filter_topology
+from app.twitter_user_filter import twitter_user_filter_topology
+from app.page_rank_topology import page_rank_topology
 from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT
 
 
@@ -38,7 +39,7 @@ class Collector:
 class CraneSlave:
     def __init__(self, membership_list):
         self.membership_list = membership_list
-        self.topology_list = [word_count_topology, 'haha', twitter_user_filter_topology]
+        self.topology_list = [word_count_topology, page_rank_topology, twitter_user_filter_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.udp_receiver_thread = threading.Thread(target=self.udp_recevier)
         self.udp_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
