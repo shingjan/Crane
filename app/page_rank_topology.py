@@ -31,6 +31,7 @@ class ComputeContribsBolt(Bolt):
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
         for big_tup in tuple_batch.tuple_list:
+            print(big_tup.tup)
             url, rank = big_tup.tup
             if url in self.ranks:
                 rank += self.ranks.get(url)
