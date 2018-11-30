@@ -1,10 +1,9 @@
 import random
 from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
 
-
-class SplitBolt(Bolt):
+class ParseNeighborsBolt(Bolt):
     def __init__(self):
-        super(SplitBolt, self).__init__('SplitBolt')
+        super(ParseNeighborsBolt, self).__init__('ParseNeighborsBolt')
 
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
@@ -12,9 +11,11 @@ class SplitBolt(Bolt):
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
-            words = tup.split(' ')
-            for word in words:
-                tmp_tuple = Tuple(word)
+            url_list = tup.split('\t')
+            urls = [url_list[i] for i in range(len(url_list)) if i != 0]
+            weight = len(urls)
+            for url in urls:
+                tmp_tuple = Tuple((url, 1/weight))
                 xor_id ^= tmp_tuple.uid
                 new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, new_tuple_batch.uid,
@@ -22,33 +23,30 @@ class SplitBolt(Bolt):
         collector.ack(rid, xor_id)
 
 
-class CountBolt(Bolt):
+class ComputeContribsBolt(Bolt):
     def __init__(self):
-        self.counts = {}
-        super(CountBolt, self).__init__('CountBolt')
+        self.ranks = {}
+        super(ComputeContribsBolt, self).__init__('ComputeContribsBolt')
 
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        for big_tuple in tuple_batch.tuple_list:
-            word = big_tuple.tup
-            count = 0
-            if word in self.counts:
-                count = self.counts.get(word)
-            count += 1
-            self.counts[word] = count
-        for word, count in self.counts.items():
-            tmp_tuple = Tuple((word, count))
+        for big_tup in tuple_batch.tuple_list:
+            url, rank = big_tup.tup
+            if url in self.ranks:
+                rank += self.ranks.get(url)
+            self.ranks[url] = rank
+        for url, rank in self.ranks.items():
+            tmp_tuple = Tuple((url, rank))
             new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0,
                        collector.master, CRANE_AGGREGATOR_PORT)
         collector.ack(rid, xor_id)
-        self.counts.clear()
+        self.ranks.clear()
 
 
-word_count_topology = Topology("WordCount Topology")
-word_count_topology.set_spout('app/wordcount2MB.csv')
-splitBolt = SplitBolt()
-countBolt = CountBolt()
-word_count_topology.set_bolt(splitBolt)
-word_count_topology.set_bolt(countBolt)
-
+page_rank_topology = Topology("PageRank Topology")
+page_rank_topology.set_spout('app/page_rank.csv')
+computeContribsBolt = ComputeContribsBolt()
+parseNeighborsBolt = ParseNeighborsBolt()
+page_rank_topology.set_bolt(computeContribsBolt)
+page_rank_topology.set_bolt(parseNeighborsBolt)

@@ -31,7 +31,7 @@ class Topology:
         self.bolt_list = []
         self.spout = None
 
-    def set_bolt(self, bolt, group_method):
+    def set_bolt(self, bolt):
         self.bolt_list.append(bolt)
 
     def set_spout(self, file_path):
