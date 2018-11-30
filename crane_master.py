@@ -3,7 +3,6 @@ import threading
 import socket
 import time
 import random
-from copy import deepcopy
 import _pickle as cpk
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
@@ -11,7 +10,7 @@ from app.page_rank_topology import page_rank_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from dfs.mmp_server import MmpServer
 from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
-    CRANE_MAX_INTERVAL
+    CRANE_MAX_INTERVAL, CRANE_BATCH_SIZE
 
 
 class CraneMaster:
@@ -128,7 +127,7 @@ class CraneMaster:
             else:
                 big_tuple = Tuple(tup)
                 tuple_batch.add_tuple(big_tuple)
-                if len(tuple_batch.tuple_list) == 250:
+                if len(tuple_batch.tuple_list) == CRANE_BATCH_SIZE:
                     self.emit(tuple_batch, self.topology_num)
                     tuple_batch = TupleBatch()
         print(self.prefix + 'All tuples transmitted. Spout closed down.')
