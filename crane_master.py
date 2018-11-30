@@ -59,7 +59,7 @@ class CraneMaster:
             print(self.prefix, "A scan begins...")
             finished = 0
             root_tup_ts_dict = cpk.loads(cpk.dumps(self.root_tup_ts_dict))
-            self.print_result()
+            # self.print_result()
             for rid in root_tup_ts_dict:
                 tup = root_tup_ts_dict[rid][0]
                 time_stamp = root_tup_ts_dict[rid][1]
