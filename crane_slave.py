@@ -12,7 +12,7 @@ class Collector:
     def __init__(self, master):
         self.master = master
 
-    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def udp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         packet = pk.dumps({
             'topology': topology,
@@ -25,7 +25,7 @@ class Collector:
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def tcp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
@@ -64,11 +64,11 @@ class CraneSlave:
         self.topology_list = [word_count_topology, page_rank_topology, twitter_user_filter_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.slave_receiver_thread = threading.Thread(target=self.slave_recevier)
-        self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.slave_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_PORT))
         self.slave_receiver_socket.settimeout(2)
-        # self.slave_receiver_socket.listen(5)
+        self.slave_receiver_socket.listen(5)
 
         self.master = None
         self.prefix = "SLAVE - [INFO]: "
@@ -83,16 +83,16 @@ class CraneSlave:
     def slave_recevier(self):
         while True:
             try:
-                # conn, addr = self.slave_receiver_socket.accept()
-                # chunks = []
-                # while True:
-                #    content = conn.recv(1024)
-                #    if not content:
-                #        break  # EOF
-                #    chunks.append(content)
-                # msg = pk.loads(b''.join(chunks))
-                message, addr = self.slave_receiver_socket.recvfrom(65535)
-                msg = pk.loads(message)
+                conn, addr = self.slave_receiver_socket.accept()
+                chunks = []
+                while True:
+                    content = conn.recv(1024)
+                    if not content:
+                        break  # EOF
+                    chunks.append(content)
+                msg = pk.loads(b''.join(chunks))
+                # message, addr = self.slave_receiver_socket.recvfrom(65535)
+                # msg = pk.loads(message)
                 self.exec_msg(msg)
             except socket.timeout:
                 continue

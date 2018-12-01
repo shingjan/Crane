@@ -19,17 +19,17 @@ class CraneMaster:
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
-        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ack_receiver_socket.bind(('0.0.0.0', CRANE_MASTER_ACK_PORT))
         self.ack_receiver_socket.settimeout(2)
-        # self.ack_receiver_socket.listen(10)
+        self.ack_receiver_socket.listen(10)
 
-        self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.aggregator_socket.bind(('0.0.0.0', CRANE_AGGREGATOR_PORT))
         self.aggregator_socket.settimeout(2)
-        # self.aggregator_socket.listen(10)
+        self.aggregator_socket.listen(10)
 
         self.leader = self.local_ip
         self.prefix = "MASTER - [INFO]: "
@@ -50,16 +50,16 @@ class CraneMaster:
     def ack_receiver(self):
         while self.is_running:
             try:
-                # conn, addr = self.ack_receiver_socket.accept()
-                # chunks = []
-                # while True:
-                #    content = conn.recv(1024)
-                #    if not content:
-                #        break  # EOF
-                #    chunks.append(content)
-                # msg = pk.loads(b''.join(chunks))
-                message, addr = self.ack_receiver_socket.recvfrom(65535)
-                msg = pk.loads(message)
+                conn, addr = self.ack_receiver_socket.accept()
+                chunks = []
+                while True:
+                    content = conn.recv(1024)
+                    if not content:
+                        break  # EOF
+                    chunks.append(content)
+                msg = pk.loads(b''.join(chunks))
+                # message, addr = self.ack_receiver_socket.recvfrom(65535)
+                # msg = pk.loads(message)
                 rid = msg['rid']
                 old_rid = self.root_tup_ts_dict[rid][2]
                 self.root_tup_ts_dict[rid][2] = old_rid ^ msg['xor_id']
@@ -92,16 +92,16 @@ class CraneMaster:
     def crane_aggregator(self):
         while self.is_running:
             try:
-                message, addr = self.aggregator_socket.recvfrom(65535)
-                msg = pk.loads(message)
-                # conn, addr = self.aggregator_socket.accept()
-                # chunks = []
-                # while True:
-                #    content = conn.recv(1024)
-                #    if not content:
-                #        break  # EOF
-                #    chunks.append(content)
-                # msg = pk.loads(b''.join(chunks))
+                # message, addr = self.aggregator_socket.recvfrom(65535)
+                # msg = pk.loads(message)
+                conn, addr = self.aggregator_socket.accept()
+                chunks = []
+                while True:
+                    content = conn.recv(1024)
+                    if not content:
+                        break  # EOF
+                    chunks.append(content)
+                msg = pk.loads(b''.join(chunks))
                 tuple_batch = msg['tup']
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
@@ -115,7 +115,7 @@ class CraneMaster:
         self.monitor_thread.join()
         self.aggregator_thread.join()
 
-    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def udp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         packet = pk.dumps({
             'topology': topology,
@@ -128,7 +128,7 @@ class CraneMaster:
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def tcp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
