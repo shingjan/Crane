@@ -1,5 +1,4 @@
-import random
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch
 
 
 class FilterBolt(Bolt):
@@ -8,7 +7,6 @@ class FilterBolt(Bolt):
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        next_node_index = random.randint(1, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
@@ -16,8 +14,7 @@ class FilterBolt(Bolt):
             if int(words[1]) > 50:
                 tmp_tuple = Tuple((words[0], 1))
                 new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid,  mmp_list[next_node_index][0],
-                       CRANE_SLAVE_PORT)
+        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid)
 
 class CountBolt(Bolt):
     def __init__(self):
@@ -31,7 +28,7 @@ class CountBolt(Bolt):
             self.counter += word[1]
         tmp_tuple = Tuple(('result', self.counter))
         new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, rid, collector.master, CRANE_AGGREGATOR_PORT)
+        collector.emit(top_num, bolt_num, new_tuple_batch, rid, collector.m)
         self.counter = 0
 
 twitter_user_filter_topology = Topology("third")

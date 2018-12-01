@@ -1,4 +1,4 @@
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch
 
 
 class SplitBolt(Bolt):
