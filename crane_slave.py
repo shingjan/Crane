@@ -77,7 +77,7 @@ class CraneSlave:
 
         self.master = None
         self.prefix = "SLAVE - [INFO]: "
-        self.collector = Collector(None)
+        self.collector = Collector(self.membership_list)
 
     def run(self):
         self.slave_receiver_thread.start()
