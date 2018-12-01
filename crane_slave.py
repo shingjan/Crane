@@ -95,6 +95,7 @@ class CraneSlave:
                         break  # EOF
                     chunks.append(content)
                     bytes_recd += len(content)
+                print(total_length, " --- ", bytes_recd)
                 if bytes_recd != total_length:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
