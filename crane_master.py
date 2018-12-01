@@ -19,15 +19,17 @@ class CraneMaster:
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
-        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ack_receiver_socket.bind(('0.0.0.0', CRANE_MASTER_ACK_PORT))
         self.ack_receiver_socket.settimeout(2)
-        self.ack_receiver_socket.listen(10)
+        # self.ack_receiver_socket.listen(10)
 
-        self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.aggregator_socket.bind(('0.0.0.0', CRANE_AGGREGATOR_PORT))
         self.aggregator_socket.settimeout(2)
-        self.aggregator_socket.listen(10)
+        # self.aggregator_socket.listen(10)
 
         self.leader = self.local_ip
         self.prefix = "MASTER - [INFO]: "
