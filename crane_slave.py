@@ -54,7 +54,7 @@ class Collector:
         self.master = master
 
     def emit(self, top_num, bolt_num, big_tup, rid):
-        recv_ip = random.random.randint(1, len(self.mmp_list) - 1)
+        recv_ip = random.randint(1, len(self.mmp_list) - 1)
         print(self.prefix, 'emit message to', recv_ip)
         self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, CRANE_SLAVE_PORT)
 
