@@ -143,9 +143,10 @@ class CraneMaster:
             else:
                 big_tuple = Tuple(tup)
                 tuple_batch.add_tuple(big_tuple)
-                if len(tuple_batch.tuple_list) == CRANE_BATCH_SIZE:
+                if len(tuple_batch.tuple_list) >= CRANE_BATCH_SIZE:
                     self.emit(tuple_batch, self.topology_num)
                     tuple_batch = TupleBatch()
+        curr_top.spout.close()
         print(self.prefix + 'All tuples transmitted. Spout closed down.')
         self.monitor_thread.start()
 
