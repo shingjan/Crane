@@ -96,7 +96,7 @@ class CraneSlave:
                     chunks.append(content)
                     bytes_recd += len(content)
                 print(total_length, " --- ", bytes_recd)
-                if bytes_recd != total_length - 18:
+                if bytes_recd != total_length - 1018:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
                 msg = pk.loads(b''.join(chunks))
