@@ -48,7 +48,6 @@ class Collector:
             if sent == 0:
                 raise RuntimeError("socket connection broken")
             total_sent = total_sent + sent
-        skt.sendall(packet)
         skt.shutdown(socket.SHUT_RDWR)
         skt.close()
 
@@ -95,6 +94,7 @@ class CraneSlave:
                         break  # EOF
                     chunks.append(content)
                 msg = pk.loads(b''.join(chunks))
+                conn.close()
                 self.exec_msg(msg)
             except socket.timeout:
                 continue
