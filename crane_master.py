@@ -28,7 +28,6 @@ class CraneMaster:
         self.leader = self.local_ip
         self.prefix = "MASTER - [INFO]: "
         self.mmp_list = mmp_list
-        self.slaves = [i[0] for i in mmp_list if i[0] != self.local_ip]
         self.root_tup_ts_dict = {}
         self.final_result = {}
         self.final_result = defaultdict(int)
@@ -132,10 +131,9 @@ class CraneMaster:
 
     def emit(self, tuple_batch, top_num):
         self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
-        # Send to VM3 for testing purposes
-        next_node_index = random.randint(0, len(self.slaves) - 1)
+        next_node_index = random.randint(1, len(self.mmp_list) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid,
-                      self.slaves[next_node_index], CRANE_SLAVE_PORT)
+                      self.mmp_list[next_node_index], CRANE_SLAVE_PORT)
 
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]
