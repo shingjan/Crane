@@ -35,12 +35,7 @@ class Collector:
         })
         connected = False
         # print('try to connect to ip: ', ip, ' with port', port)
-        while not connected:
-            try:
-                skt.connect((ip, port))
-                connected = True
-            except socket.timeout:
-                continue
+        skt.connect((ip, port))
         print(len(packet))
         total_sent = 0
         while total_sent < len(packet):
