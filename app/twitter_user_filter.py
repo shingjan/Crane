@@ -15,9 +15,7 @@ class FilterBolt(Bolt):
             words = tup.split(',')
             if int(words[1]) > 50:
                 tmp_tuple = Tuple((words[0], 1))
-            else:
-                tmp_tuple = Tuple((words[0], 0))
-            new_tuple_batch.add_tuple(tmp_tuple)
+                new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid,  mmp_list[next_node_index][0],
                        CRANE_SLAVE_PORT)
 
