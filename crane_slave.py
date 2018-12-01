@@ -38,6 +38,7 @@ class Collector:
             skt.connect((ip, port))
             print(len(packet))
             total_sent = 0
+            skt.send(pk.dumps(len(packet)))
             while total_sent < len(packet):
                 sent = skt.send(packet[total_sent:])
                 if sent == 0:
@@ -85,18 +86,17 @@ class CraneSlave:
                 # msg = pk.loads(message)
                 conn, addr = self.slave_receiver_socket.accept()
                 chunks = []
-                is_connected = True
-                while True:
-                    try:
-                        content = conn.recv(1024)
-                        if not content:
-                            break  # EOF
-                        chunks.append(content)
-                    except socket.timeout:
-                        print(self.prefix, "Connection reset. Abort.")
-                        is_connected = False
-                        break
-                if not is_connected:
+                bytes_recv = conn.recv(1024)
+                total_length = pk.loads(bytes_recv)
+                bytes_recd = 0
+                while bytes_recd < total_length:
+                    content = conn.recv(min(total_length - bytes_recd, 1024))
+                    if not content:
+                        break  # EOF
+                    chunks.append(content)
+                    bytes_recd += len(content)
+                if bytes_recd <= total_length:
+                    print(self.prefix, 'Connection interrupted. Abort')
                     return
                 msg = pk.loads(b''.join(chunks))
                 conn.close()
