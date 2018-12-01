@@ -119,6 +119,7 @@ class CraneMaster:
                 connected = True
             except socket.timeout:
                 pass
+        print(len(packet))
         skt.sendall(packet)
         skt.shutdown(socket.SHUT_RDWR)
         skt.close()

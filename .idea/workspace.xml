@@ -39,7 +39,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="md" value="65" />
-          <entry key="py" value="13499" />
+          <entry key="py" value="13504" />
           <entry key="sh" value="33" />
           <entry key="topology" value="124" />
         </counts>
@@ -49,7 +49,7 @@
           <entry key="Bash" value="1" />
           <entry key="Markdown" value="65" />
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="13623" />
+          <entry key="Python" value="13628" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -58,22 +58,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="45" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
+            <state relative-caret-position="370">
+              <caret line="58" column="23" selection-start-line="58" selection-start-column="23" selection-end-line="58" selection-end-column="23" />
               <folding>
-                <marker date="1543654213953" expanded="true" signature="227:511" ph="..." />
-                <marker date="1543654213953" expanded="true" signature="330:464" ph="..." />
-                <marker date="1543654213953" expanded="true" signature="666:708" ph="..." />
-                <marker date="1543654213953" expanded="true" signature="900:1089" ph="..." />
+                <marker date="1543655215467" expanded="true" signature="227:511" ph="..." />
+                <marker date="1543655215467" expanded="true" signature="330:464" ph="..." />
+                <marker date="1543655215467" expanded="true" signature="666:708" ph="..." />
+                <marker date="1543655215467" expanded="true" signature="900:1089" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crane_master.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1332">
@@ -101,11 +101,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
+            <state relative-caret-position="325">
+              <caret line="45" column="47" selection-start-line="45" selection-start-column="47" selection-end-line="45" selection-end-column="47" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1543654213941" expanded="true" signature="1600:1602" ph="..." />
+                <marker date="1543654309381" expanded="true" signature="1600:1602" ph="..." />
               </folding>
             </state>
           </provider>
@@ -165,10 +165,10 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/app/twitter_user_filter.py" />
         <option value="$PROJECT_DIR$/app/page_rank_topology.py" />
-        <option value="$PROJECT_DIR$/util.py" />
         <option value="$PROJECT_DIR$/crane_slave.py" />
         <option value="$PROJECT_DIR$/crane_master.py" />
         <option value="$PROJECT_DIR$/app/word_count_topology.py" />
+        <option value="$PROJECT_DIR$/util.py" />
       </list>
     </option>
   </component>
@@ -193,16 +193,6 @@
             <path>
               <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
               <item name="mp4-ys26-weilinz2" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mp4-ys26-weilinz2" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mp4-ys26-weilinz2" type="462c0819:PsiDirectoryNode" />
-              <item name="dfs" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -257,7 +247,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -271,7 +261,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.24383561" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.24383561" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -410,30 +400,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="45" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
-          <folding>
-            <marker date="1543654213953" expanded="true" signature="227:511" ph="..." />
-            <marker date="1543654213953" expanded="true" signature="330:464" ph="..." />
-            <marker date="1543654213953" expanded="true" signature="666:708" ph="..." />
-            <marker date="1543654213953" expanded="true" signature="900:1089" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <marker date="1543654213941" expanded="true" signature="1600:1602" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crane_slave.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="673">
@@ -451,6 +417,30 @@
           <caret line="129" column="63" selection-start-line="129" selection-start-column="63" selection-end-line="129" selection-end-column="63" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="45" column="47" selection-start-line="45" selection-start-column="47" selection-end-line="45" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1543654309381" expanded="true" signature="1600:1602" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="58" column="23" selection-start-line="58" selection-start-column="23" selection-end-line="58" selection-end-column="23" />
+          <folding>
+            <marker date="1543655215467" expanded="true" signature="227:511" ph="..." />
+            <marker date="1543655215467" expanded="true" signature="330:464" ph="..." />
+            <marker date="1543655215467" expanded="true" signature="666:708" ph="..." />
+            <marker date="1543655215467" expanded="true" signature="900:1089" ph="..." />
           </folding>
         </state>
       </provider>
