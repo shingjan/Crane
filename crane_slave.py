@@ -11,6 +11,7 @@ from util import CRANE_SLAVE_PORT
 class Collector:
     def __init__(self, master):
         self.master = master
+        self.prefix = "COLLECTOR - [INFO]: "
 
     def udp_unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -33,24 +34,25 @@ class Collector:
             'rid': rid,
             'master': self.master
         })
-        connected = False
-        # print('try to connect to ip: ', ip, ' with port', port)
-        skt.connect((ip, port))
-        print(len(packet))
-        total_sent = 0
-        while total_sent < len(packet):
-            sent = skt.send(packet[total_sent:])
-            if sent == 0:
-                raise RuntimeError("socket connection broken")
-            total_sent = total_sent + sent
-        skt.shutdown(socket.SHUT_RDWR)
+        try:
+            skt.connect((ip, port))
+            print(len(packet))
+            total_sent = 0
+            while total_sent < len(packet):
+                sent = skt.send(packet[total_sent:])
+                if sent == 0:
+                    raise RuntimeError("socket connection broken")
+                total_sent = total_sent + sent
+            skt.shutdown(socket.SHUT_RDWR)
+        except ConnectionRefusedError:
+            print(self.prefix, "Connection Refused with ", ip, " Emit abort.")
         skt.close()
 
     def set_master(self, master):
         self.master = master
 
     def emit(self, top_num, bolt_num, big_tup, rid, recv_ip, recv_port):
-        print('emit message to', recv_ip)
+        print(self.prefix, 'emit message to', recv_ip)
         self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, recv_port)
 
 
@@ -83,11 +85,19 @@ class CraneSlave:
                 # msg = pk.loads(message)
                 conn, addr = self.slave_receiver_socket.accept()
                 chunks = []
+                is_connected = True
                 while True:
-                    content = conn.recv(1024)
-                    if not content:
-                        break  # EOF
-                    chunks.append(content)
+                    try:
+                        content = conn.recv(1024)
+                        if not content:
+                            break  # EOF
+                        chunks.append(content)
+                    except socket.timeout:
+                        print(self.prefix, "Connection reset. Abort.")
+                        is_connected = False
+                        break
+                if not is_connected:
+                    return
                 msg = pk.loads(b''.join(chunks))
                 conn.close()
                 self.exec_msg(msg)

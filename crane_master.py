@@ -64,15 +64,21 @@ class CraneMaster:
     def crane_aggregator(self):
         while self.is_running:
             try:
-                # message, addr = self.aggregator_socket.recvfrom(65535)
-                # msg = pk.loads(message)
                 conn, addr = self.aggregator_socket.accept()
                 chunks = []
+                is_connected = True
                 while True:
-                    content = conn.recv(1024)
-                    if not content:
-                        break  # EOF
-                    chunks.append(content)
+                    try:
+                        content = conn.recv(1024)
+                        if not content:
+                            break  # EOF
+                        chunks.append(content)
+                    except socket.timeout:
+                        print(self.prefix, "Connection reset. Abort.")
+                        is_connected = False
+                        break
+                if not is_connected:
+                    return
                 msg = pk.loads(b''.join(chunks))
                 rid = msg['rid']
                 tuple_batch = msg['tup']
@@ -111,15 +117,18 @@ class CraneMaster:
             'rid': rid,
             'master': self.local_ip
         })
-        skt.connect((ip, port))
-        print(len(packet))
-        total_sent = 0
-        while total_sent < len(packet):
-            sent = skt.send(packet[total_sent:])
-            if sent == 0:
-                raise RuntimeError("socket connection broken")
-            total_sent = total_sent + sent
-        skt.shutdown(socket.SHUT_RDWR)
+        try:
+            skt.connect((ip, port))
+            print(len(packet))
+            total_sent = 0
+            while total_sent < len(packet):
+                sent = skt.send(packet[total_sent:])
+                if sent == 0:
+                    raise RuntimeError("socket connection broken")
+                total_sent = total_sent + sent
+            skt.shutdown(socket.SHUT_RDWR)
+        except ConnectionRefusedError:
+            print(self.prefix, "Connection Refused with ", ip, " Emit abort.")
         skt.close()
 
     def emit(self, tuple_batch, top_num):
