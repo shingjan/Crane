@@ -122,6 +122,7 @@ class CraneMaster:
             'master': self.local_ip
         })
         connected = False
+        print('try to connect to ip: ', ip, ' with port', port)
         while not connected:
             try:
                 skt.connect((ip, port))

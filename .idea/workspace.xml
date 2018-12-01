@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/crane_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/crane_master.py" afterDir="false" />
-    </list>
+    <list default="true" id="bca42cd7-a62a-4dfa-9440-915127a3ccd4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +23,7 @@
         <counts>
           <entry key="csv" value="3" />
           <entry key="md" value="3" />
-          <entry key="py" value="45" />
+          <entry key="py" value="46" />
           <entry key="sh" value="4" />
           <entry key="topology" value="1" />
         </counts>
@@ -35,13 +33,13 @@
           <entry key="Bash" value="2" />
           <entry key="Markdown" value="3" />
           <entry key="PLAIN_TEXT" value="5" />
-          <entry key="Python" value="46" />
+          <entry key="Python" value="47" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="md" value="65" />
-          <entry key="py" value="12996" />
+          <entry key="py" value="13161" />
           <entry key="sh" value="33" />
           <entry key="topology" value="124" />
         </counts>
@@ -51,7 +49,7 @@
           <entry key="Bash" value="1" />
           <entry key="Markdown" value="65" />
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="13120" />
+          <entry key="Python" value="13285" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -75,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crane_master.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="117" column="26" selection-start-line="117" selection-start-column="26" selection-end-line="117" selection-end-column="26" />
+            <state relative-caret-position="242">
+              <caret line="93" selection-start-line="93" selection-end-line="100" selection-end-column="48" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -90,11 +88,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crane_slave.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="45" column="61" selection-start-line="45" selection-start-column="61" selection-end-line="45" selection-end-column="61" />
+            <state relative-caret-position="855">
+              <caret line="57" column="26" lean-forward="true" selection-start-line="57" selection-start-column="26" selection-end-line="57" selection-end-column="26" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <marker date="1543647743726" expanded="true" signature="836:871" ph="..." />
+                <marker date="1543649425710" expanded="true" signature="1066:1101" ph="..." />
               </folding>
             </state>
           </provider>
@@ -103,10 +101,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dfs/dfs_server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2704">
-              <caret line="310" column="37" selection-start-line="310" selection-start-column="37" selection-end-line="310" selection-end-column="37" />
+            <state relative-caret-position="325">
+              <caret line="138" column="53" selection-start-line="138" selection-start-column="27" selection-end-line="138" selection-end-column="53" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-7">
+              <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+                <marker date="1543647743717" expanded="true" signature="1766:1768" ph="..." />
               </folding>
             </state>
           </provider>
@@ -130,13 +141,13 @@
       <find>_reset</find>
       <find>_start_repair_file</find>
       <find>sleep</find>
-      <find>join</find>
       <find>root_tup_ts</find>
       <find>membership_list</find>
       <find>_elect</find>
       <find>print</find>
       <find>root_tup</find>
       <find>self.leader</find>
+      <find>join</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -168,8 +179,8 @@
         <option value="$PROJECT_DIR$/app/word_count_topology.py" />
         <option value="$PROJECT_DIR$/app/twitter_user_filter.py" />
         <option value="$PROJECT_DIR$/app/page_rank_topology.py" />
-        <option value="$PROJECT_DIR$/crane_slave.py" />
         <option value="$PROJECT_DIR$/crane_master.py" />
+        <option value="$PROJECT_DIR$/crane_slave.py" />
       </list>
     </option>
   </component>
@@ -194,6 +205,11 @@
             <path>
               <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
               <item name="mp4-ys26-weilinz2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mp4-ys26-weilinz2" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mp4-ys26-weilinz2" type="b2602c69:ProjectViewProjectNode" />
@@ -252,9 +268,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -268,7 +283,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.24383561" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.24383561" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -407,32 +422,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <marker date="1543647743717" expanded="true" signature="1766:1768" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/crane_slave.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" column="61" selection-start-line="45" selection-start-column="61" selection-end-line="45" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <marker date="1543647743726" expanded="true" signature="836:871" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dfs/dfs_server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2704">
-          <caret line="310" column="37" selection-start-line="310" selection-start-column="37" selection-end-line="310" selection-end-column="37" />
+        <state relative-caret-position="325">
+          <caret line="138" column="53" selection-start-line="138" selection-start-column="27" selection-end-line="138" selection-end-column="53" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -441,10 +434,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/crane_master.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="117" column="26" selection-start-line="117" selection-start-column="26" selection-end-line="117" selection-end-column="26" />
+        <state relative-caret-position="242">
+          <caret line="93" selection-start-line="93" selection-end-line="100" selection-end-column="48" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crane_slave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="26" lean-forward="true" selection-start-line="57" selection-start-column="26" selection-end-line="57" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <marker date="1543649425710" expanded="true" signature="1066:1101" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/word_count_topology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1543647743717" expanded="true" signature="1766:1768" ph="..." />
           </folding>
         </state>
       </provider>
