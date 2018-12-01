@@ -13,7 +13,7 @@ class Collector:
         self.master = master
 
     def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
-        skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
             'bolt': bolt,
@@ -22,7 +22,15 @@ class Collector:
             'xor_id': xor_id,
             'master': self.master
         })
-        skt.sendto(packet, (ip, port))
+        connected = False
+        while not connected:
+            try:
+                skt.connect((ip, port))
+                connected = True
+            except socket.timeout:
+                pass
+        skt.sendall(packet)
+        skt.shutdown(socket.SHUT_RDWR)
         skt.close()
 
     def set_master(self, master):
@@ -41,26 +49,34 @@ class CraneSlave:
         self.membership_list = membership_list
         self.topology_list = [word_count_topology, page_rank_topology, twitter_user_filter_topology]
         self.local_ip = socket.gethostbyname(socket.getfqdn())
-        self.udp_receiver_thread = threading.Thread(target=self.udp_recevier)
-        self.udp_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_PORT))
-        self.udp_receiver_socket.settimeout(2)
+        self.slave_receiver_thread = threading.Thread(target=self.slave_recevier)
+        self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.slave_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_PORT))
+        self.slave_receiver_socket.settimeout(2)
+        self.slave_receiver_socket.listen(5)
 
         self.master = None
         self.prefix = "SLAVE - [INFO]: "
         self.collector = Collector(None)
 
     def run(self):
-        self.udp_receiver_thread.start()
+        self.slave_receiver_thread.start()
 
     def terminate(self):
-        self.udp_receiver_thread.join()
+        self.slave_receiver_thread.join()
 
-    def udp_recevier(self):
+    def slave_recevier(self):
         while True:
             try:
-                message, addr = self.udp_receiver_socket.recvfrom(65535)
-                msg = pk.loads(message)
+                # message, addr = self.slave_receiver_socket.recvfrom(65535)
+                conn, addr = self.slave_receiver_socket.accept()
+                chunks = []
+                while True:
+                    content = conn.recv(1024)
+                    if not content:
+                        break  # EOF
+                    chunks.append(content)
+                msg = pk.loads(b''.join(chunks))
                 self.exec_msg(msg)
             except socket.timeout:
                 continue
