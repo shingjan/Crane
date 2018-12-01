@@ -119,7 +119,6 @@ class CraneMaster:
         })
         try:
             skt.connect((ip, port))
-            print(len(packet))
             total_sent = 0
             # skt.send(pk.dumps(len(packet)))
             while total_sent < len(packet):

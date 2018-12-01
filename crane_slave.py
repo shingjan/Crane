@@ -1,17 +1,19 @@
 import pickle as pk
 import threading
 import socket
+import random
 from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from app.page_rank_topology import page_rank_topology
-from util import CRANE_SLAVE_PORT
+from util import CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
 
 
 class Collector:
-    def __init__(self, master):
-        self.master = master
+    def __init__(self, mmp_list):
+        self.mmp_list = mmp_list
         self.prefix = "COLLECTOR - [INFO]: "
+        self.master = mmp_list[0][0]
 
     def udp_unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -36,7 +38,6 @@ class Collector:
         })
         try:
             skt.connect((ip, port))
-            print(len(packet))
             total_sent = 0
             # skt.send(pk.dumps(len(packet)))
             while total_sent < len(packet):
@@ -52,9 +53,14 @@ class Collector:
     def set_master(self, master):
         self.master = master
 
-    def emit(self, top_num, bolt_num, big_tup, rid, recv_ip, recv_port):
+    def emit(self, top_num, bolt_num, big_tup, rid):
+        recv_ip = random.random.randint(1, len(self.mmp_list) - 1)
         print(self.prefix, 'emit message to', recv_ip)
-        self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, recv_port)
+        self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, CRANE_SLAVE_PORT)
+
+    def ack(self, top_num, bolt_num, big_tup, rid):
+        print(self.prefix, 'emit message to', self.master)
+        self._unicast(top_num, bolt_num, big_tup, rid, self.master, CRANE_AGGREGATOR_PORT)
 
 
 class CraneSlave:
