@@ -1,5 +1,4 @@
-import random
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch
 
 
 class ParseNeighborsBolt(Bolt):
@@ -8,10 +7,9 @@ class ParseNeighborsBolt(Bolt):
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        next_node_index = random.randint(1, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
-            print(tup)
+            #print(tup)
             tup = tup.replace("\n", "")
             url_list = tup.split('\t')
             urls = [url_list[i] for i in range(len(url_list)) if i != 0]
@@ -19,7 +17,7 @@ class ParseNeighborsBolt(Bolt):
             for url in urls:
                 tmp_tuple = Tuple((url, 1/weight))
                 new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, mmp_list[next_node_index][0], CRANE_SLAVE_PORT)
+        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid)
 
 
 class ComputeContribsBolt(Bolt):
@@ -37,7 +35,7 @@ class ComputeContribsBolt(Bolt):
         for url, rank in self.ranks.items():
             tmp_tuple = Tuple((url, rank))
             new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, rid, collector.master, CRANE_AGGREGATOR_PORT)
+        collector.ack(top_num, bolt_num, new_tuple_batch, rid)
         self.ranks.clear()
 
 

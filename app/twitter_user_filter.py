@@ -28,7 +28,7 @@ class CountBolt(Bolt):
             self.counter += word[1]
         tmp_tuple = Tuple(('result', self.counter))
         new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, rid, collector.m)
+        collector.ack(top_num, bolt_num, new_tuple_batch, rid)
         self.counter = 0
 
 twitter_user_filter_topology = Topology("third")
