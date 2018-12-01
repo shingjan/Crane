@@ -75,7 +75,8 @@ class CraneMaster:
                         break  # EOF
                     chunks.append(content)
                     bytes_recd += len(content)
-                if bytes_recd != total_length:
+                print(total_length, ' --- ', bytes_recd)
+                if bytes_recd != total_length - 18:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
                 msg = pk.loads(b''.join(chunks))

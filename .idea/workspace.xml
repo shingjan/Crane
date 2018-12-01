@@ -39,7 +39,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="md" value="65" />
-          <entry key="py" value="14156" />
+          <entry key="py" value="14178" />
           <entry key="sh" value="33" />
           <entry key="topology" value="124" />
         </counts>
@@ -49,7 +49,7 @@
           <entry key="Bash" value="1" />
           <entry key="Markdown" value="65" />
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="14280" />
+          <entry key="Python" value="14302" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -73,10 +73,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/crane_master.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="991">
+            <state relative-caret-position="-457">
               <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
@@ -85,14 +85,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crane_slave.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="99" column="28" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="28" />
+            <state relative-caret-position="269">
+              <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <marker date="1543702178171" expanded="true" signature="1702:1737" ph="..." />
+                <marker date="1543702551539" expanded="true" signature="1702:1737" ph="..." />
               </folding>
             </state>
           </provider>
@@ -258,6 +258,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -436,23 +437,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crane_master.py">
+    <entry file="file://$PROJECT_DIR$/crane_slave.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="991">
-          <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
+        <state relative-caret-position="269">
+          <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <marker date="1543702551539" expanded="true" signature="1702:1737" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crane_slave.py">
+    <entry file="file://$PROJECT_DIR$/crane_master.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="99" column="28" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="28" />
+        <state relative-caret-position="-457">
+          <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-            <marker date="1543702178171" expanded="true" signature="1702:1737" ph="..." />
           </folding>
         </state>
       </provider>
