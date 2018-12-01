@@ -97,7 +97,7 @@ class CraneSlave:
                     bytes_recd += len(content)
                 if bytes_recd != total_length:
                     print(self.prefix, 'Connection interrupted. Abort')
-                    return
+                    continue
                 msg = pk.loads(b''.join(chunks))
                 conn.close()
                 self.exec_msg(msg)

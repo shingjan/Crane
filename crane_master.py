@@ -77,7 +77,7 @@ class CraneMaster:
                     bytes_recd += len(content)
                 if bytes_recd != total_length:
                     print(self.prefix, 'Connection interrupted. Abort')
-                    return
+                    continue
                 msg = pk.loads(b''.join(chunks))
                 rid = msg['rid']
                 tuple_batch = msg['tup']
