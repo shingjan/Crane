@@ -32,7 +32,7 @@ class CountBolt(Bolt):
         self.counter = 0
 
 twitter_user_filter_topology = Topology("third")
-twitter_user_filter_topology.set_spout('app/third_80.txt')
+twitter_user_filter_topology.set_spout('app/_third_80.txt')
 filterBolt = FilterBolt()
 countBolt = CountBolt()
 twitter_user_filter_topology.set_bolt(filterBolt)
