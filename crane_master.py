@@ -66,8 +66,8 @@ class CraneMaster:
             try:
                 conn, addr = self.aggregator_socket.accept()
                 chunks = []
-                bytes_recv = conn.recv(4)
-                total_length = pk.loads(bytes_recv)
+                # bytes_recv = conn.recv(4)
+                # total_length = pk.loads(bytes_recv)
                 bytes_recd = 0
                 while True:
                     content = conn.recv(1024)
@@ -75,11 +75,11 @@ class CraneMaster:
                         break  # EOF
                     chunks.append(content)
                     bytes_recd += len(content)
-                print(total_length, ' --- ', bytes_recd)
-                if bytes_recd != total_length:
+                try:
+                    msg = pk.loads(b''.join(chunks))
+                except EOFError:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
-                msg = pk.loads(b''.join(chunks))
                 rid = msg['rid']
                 tuple_batch = msg['tup']
                 old_rid = self.root_tup_ts_dict[rid][2]
@@ -121,7 +121,7 @@ class CraneMaster:
             skt.connect((ip, port))
             print(len(packet))
             total_sent = 0
-            skt.send(pk.dumps(len(packet)))
+            # skt.send(pk.dumps(len(packet)))
             while total_sent < len(packet):
                 sent = skt.send(packet[total_sent:])
                 if sent == 0:
