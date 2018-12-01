@@ -68,7 +68,6 @@ class CraneMaster:
 
     def crane_monitor(self):
         while self.is_running:
-            print(self.prefix, "A scan begins...")
             finished = 0
             root_tup_ts_dict = cpk.loads(cpk.dumps(self.root_tup_ts_dict))
             # self.print_result()
@@ -106,6 +105,7 @@ class CraneMaster:
                 tuple_batch = msg['tup']
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
+                    print(self.prefix, tup)
                     self.final_result[tup[0]] += tup[1]
             except socket.timeout:
                 continue
