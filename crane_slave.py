@@ -40,7 +40,7 @@ class Collector:
                 skt.connect((ip, port))
                 connected = True
             except socket.timeout:
-                pass
+                continue
         print(len(packet))
         total_sent = 0
         while total_sent < len(packet):
@@ -69,7 +69,7 @@ class CraneSlave:
         self.slave_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.slave_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_PORT))
         self.slave_receiver_socket.settimeout(2)
-        self.slave_receiver_socket.listen(5)
+        self.slave_receiver_socket.listen(10)
 
         self.master = None
         self.prefix = "SLAVE - [INFO]: "

@@ -118,7 +118,7 @@ class CraneMaster:
                 skt.connect((ip, port))
                 connected = True
             except socket.timeout:
-                pass
+                continue
         print(len(packet))
         total_sent = 0
         while total_sent < len(packet):
