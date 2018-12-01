@@ -89,8 +89,8 @@ class CraneSlave:
                 bytes_recv = conn.recv(6)
                 total_length = pk.loads(bytes_recv)
                 bytes_recd = 0
-                while bytes_recd < total_length:
-                    content = conn.recv(min(total_length - bytes_recd, 1024))
+                while True:
+                    content = conn.recv(1024)
                     if not content:
                         break  # EOF
                     chunks.append(content)
