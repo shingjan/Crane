@@ -16,7 +16,7 @@ hostname = ["fa18-cs425-g63-01.cs.illinois.edu",
 port = 22
 username = getpass.getpass('Username: ')
 password = getpass.getpass('Password: ')
-command = 'cd mp4-ys26-weilinz2/ && ./setup.sh'
+command = 'cd mp4-ys26-weilinz2/ && ./clean.sh'
 
 for i in range(len(hostname)):
     client = paramiko.Transport((hostname[i], port))
