@@ -8,7 +8,7 @@ class FilterBolt(Bolt):
 
     def execute(self, top_num, bolt_num, rid, xor_id, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        next_node_index = random.randint(0, len(mmp_list) - 1)
+        next_node_index = random.randint(1, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
