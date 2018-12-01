@@ -15,7 +15,6 @@ class Spout:
         self.target = open(file_path, "r")
 
     def next_tup(self):
-        print('next tup is called')
         line = self.target.readline()
         if not line:
             self.close()

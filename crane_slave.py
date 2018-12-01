@@ -42,6 +42,12 @@ class Collector:
             except socket.timeout:
                 pass
         print(len(packet))
+        total_sent = 0
+        while total_sent < len(packet):
+            sent = skt.send(packet[total_sent:])
+            if sent == 0:
+                raise RuntimeError("socket connection broken")
+            total_sent = total_sent + sent
         skt.sendall(packet)
         skt.shutdown(socket.SHUT_RDWR)
         skt.close()

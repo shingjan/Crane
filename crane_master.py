@@ -83,6 +83,7 @@ class CraneMaster:
                     tup = big_tup.tup
                     print(self.prefix, tup)
                     self.final_result[tup[0]] += tup[1]
+                conn.close()
             except socket.timeout:
                 continue
 
@@ -120,7 +121,12 @@ class CraneMaster:
             except socket.timeout:
                 pass
         print(len(packet))
-        skt.sendall(packet)
+        total_sent = 0
+        while total_sent < len(packet):
+            sent = skt.send(packet[total_sent:])
+            if sent == 0:
+                raise RuntimeError("socket connection broken")
+            total_sent = total_sent + sent
         skt.shutdown(socket.SHUT_RDWR)
         skt.close()
 
