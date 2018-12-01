@@ -48,15 +48,16 @@ class CraneMaster:
     def ack_receiver(self):
         while self.is_running:
             try:
-                conn, addr = self.ack_receiver_socket.accept()
-                # message, addr = self.ack_receiver_socket.recvfrom(65535)
-                chunks = []
-                while True:
-                    content = conn.recv(1024)
-                    if not content:
-                        break  # EOF
-                    chunks.append(content)
-                msg = pk.loads(b''.join(chunks))
+                # conn, addr = self.ack_receiver_socket.accept()
+                # chunks = []
+                # while True:
+                #    content = conn.recv(1024)
+                #    if not content:
+                #        break  # EOF
+                #    chunks.append(content)
+                # msg = pk.loads(b''.join(chunks))
+                message, addr = self.ack_receiver_socket.recvfrom(65535)
+                msg = pk.loads(message)
                 rid = msg['rid']
                 old_rid = self.root_tup_ts_dict[rid][2]
                 self.root_tup_ts_dict[rid][2] = old_rid ^ msg['xor_id']
@@ -90,15 +91,16 @@ class CraneMaster:
     def crane_aggregator(self):
         while self.is_running:
             try:
-                # message, addr = self.aggregator_socket.recvfrom(65535)
-                conn, addr = self.aggregator_socket.accept()
-                chunks = []
-                while True:
-                    content = conn.recv(1024)
-                    if not content:
-                        break  # EOF
-                    chunks.append(content)
-                msg = pk.loads(b''.join(chunks))
+                message, addr = self.aggregator_socket.recvfrom(65535)
+                msg = pk.loads(message)
+                # conn, addr = self.aggregator_socket.accept()
+                # chunks = []
+                # while True:
+                #    content = conn.recv(1024)
+                #    if not content:
+                #        break  # EOF
+                #    chunks.append(content)
+                # msg = pk.loads(b''.join(chunks))
                 tuple_batch = msg['tup']
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
@@ -112,6 +114,19 @@ class CraneMaster:
         self.aggregator_thread.join()
 
     def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+        skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        packet = pk.dumps({
+            'topology': topology,
+            'bolt': bolt,
+            'tup': tup,
+            'rid': rid,
+            'xor_id': xor_id,
+            'master': self.local_ip
+        })
+        skt.sendto(packet, (ip, port))
+        skt.close()
+
+    def tcp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
