@@ -9,7 +9,7 @@ from app.word_count_topology import word_count_topology
 from app.page_rank_topology import page_rank_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from dfs.mmp_server import MmpServer
-from util import Tuple, TupleBatch, CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT, \
+from util import Tuple, TupleBatch, CRANE_MASTER_ACK_PORT, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL, CRANE_BATCH_SIZE
 
 
@@ -19,9 +19,9 @@ class CraneMaster:
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
 
-        self.udp_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_receiver_socket.bind(('0.0.0.0', CRANE_MASTER_UDP_PORT))
-        self.udp_receiver_socket.settimeout(2)
+        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.ack_receiver_socket.bind(('0.0.0.0', CRANE_MASTER_ACK_PORT))
+        self.ack_receiver_socket.settimeout(2)
 
         self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.aggregator_socket.bind(('0.0.0.0', CRANE_AGGREGATOR_PORT))
@@ -37,16 +37,16 @@ class CraneMaster:
         self.is_running = True
 
         # Multi thread
-        self.udp_receiver_thread = threading.Thread(target=self.udp_receiver)
+        self.ack_receiver_thread = threading.Thread(target=self.udp_receiver)
         self.monitor_thread = threading.Thread(target=self.crane_monitor)
         self.aggregator_thread = threading.Thread(target=self.crane_aggregator)
-        self.udp_receiver_thread.start()
+        self.ack_receiver_thread.start()
         self.aggregator_thread.start()
 
     def udp_receiver(self):
         while self.is_running:
             try:
-                message, addr = self.udp_receiver_socket.recvfrom(65535)
+                message, addr = self.ack_receiver_socket.recvfrom(65535)
                 msg = pk.loads(message)
                 rid = msg['rid']
                 old_rid = self.root_tup_ts_dict[rid][2]
@@ -91,7 +91,7 @@ class CraneMaster:
                 continue
 
     def terminate(self):
-        self.udp_receiver_thread.join()
+        self.ack_receiver_thread.join()
         self.monitor_thread.join()
         self.aggregator_thread.join()
 
@@ -113,7 +113,7 @@ class CraneMaster:
         # Send to VM3 for testing purposes
         next_node_index = random.randint(0, len(self.slaves) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid,
-                      self.slaves[next_node_index], CRANE_SLAVE_UDP_PORT)
+                      self.slaves[next_node_index], CRANE_SLAVE_PORT)
 
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]

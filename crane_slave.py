@@ -5,7 +5,7 @@ from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from app.page_rank_topology import page_rank_topology
-from util import CRANE_MASTER_UDP_PORT, CRANE_SLAVE_UDP_PORT
+from util import CRANE_MASTER_ACK_PORT, CRANE_SLAVE_PORT
 
 
 class Collector:
@@ -33,7 +33,7 @@ class Collector:
         self._unicast(top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port)
 
     def ack(self, rid, xor_id):
-        self._unicast(None, None, None, rid, xor_id, self.master, CRANE_MASTER_UDP_PORT)
+        self._unicast(None, None, None, rid, xor_id, self.master, CRANE_MASTER_ACK_PORT)
 
 
 class CraneSlave:
@@ -43,7 +43,7 @@ class CraneSlave:
         self.local_ip = socket.gethostbyname(socket.getfqdn())
         self.udp_receiver_thread = threading.Thread(target=self.udp_recevier)
         self.udp_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_UDP_PORT))
+        self.udp_receiver_socket.bind(('0.0.0.0', CRANE_SLAVE_PORT))
         self.udp_receiver_socket.settimeout(2)
 
         self.master = None

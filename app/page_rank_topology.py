@@ -1,5 +1,6 @@
 import random
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
+
 
 class ParseNeighborsBolt(Bolt):
     def __init__(self):
@@ -21,7 +22,7 @@ class ParseNeighborsBolt(Bolt):
                 xor_id ^= tmp_tuple.uid
                 new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, new_tuple_batch.uid,
-                       mmp_list[next_node_index][0], CRANE_SLAVE_UDP_PORT)
+                       mmp_list[next_node_index][0], CRANE_SLAVE_PORT)
         collector.ack(rid, xor_id)
 
 

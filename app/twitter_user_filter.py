@@ -1,5 +1,5 @@
 import random
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_UDP_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
 
 
 class FilterBolt(Bolt):
@@ -21,7 +21,7 @@ class FilterBolt(Bolt):
             new_tuple_batch.add_tuple(tmp_tuple)
             # TODO: Change the hard-code next-bolt receiver to a hashed one
         collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid, new_tuple_batch.uid, mmp_list[next_node_index][0],
-                       CRANE_SLAVE_UDP_PORT)
+                       CRANE_SLAVE_PORT)
         collector.ack(rid, xor_id)
 
 
@@ -37,7 +37,8 @@ class CountBolt(Bolt):
             self.counter += word[1]
         tmp_tuple = Tuple(('result', self.counter))
         new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0, collector.master, CRANE_AGGREGATOR_PORT)
+        collector.emit(top_num, bolt_num, new_tuple_batch, new_tuple_batch.uid, 0, collector.master,
+                       CRANE_AGGREGATOR_PORT)
         collector.ack(rid, xor_id)
         self.counter = 0
 
