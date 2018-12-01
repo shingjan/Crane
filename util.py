@@ -6,7 +6,7 @@ class Bolt:
         self.next_bolt = None
         self.bolt_type = bolt_type
 
-    def execute(self, top_num, bolt_num, rid, xor_id, tup, collector, mmp_list):
+    def execute(self, top_num, bolt_num, rid, tup, collector, mmp_list):
         pass
 
 
@@ -54,9 +54,8 @@ class TupleBatch:
         self.uid ^= big_tuple.uid
 
 
-CRANE_MASTER_ACK_PORT = 9527
+CRANE_AGGREGATOR_PORT = 9527
 CRANE_SLAVE_PORT = 9528
-CRANE_AGGREGATOR_PORT = 9529
 CRANE_MAX_INTERVAL = 20
 CRANE_BATCH_SIZE = 500
 

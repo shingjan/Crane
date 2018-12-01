@@ -5,34 +5,32 @@ from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from app.page_rank_topology import page_rank_topology
-from util import CRANE_MASTER_ACK_PORT, CRANE_SLAVE_PORT
+from util import CRANE_SLAVE_PORT
 
 
 class Collector:
     def __init__(self, master):
         self.master = master
 
-    def udp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def udp_unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         packet = pk.dumps({
             'topology': topology,
             'bolt': bolt,
             'tup': tup,
             'rid': rid,
-            'xor_id': xor_id,
             'master': self.master
         })
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def _unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
             'bolt': bolt,
             'tup': tup,
             'rid': rid,
-            'xor_id': xor_id,
             'master': self.master
         })
         connected = False
@@ -50,12 +48,9 @@ class Collector:
     def set_master(self, master):
         self.master = master
 
-    def emit(self, top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port):
+    def emit(self, top_num, bolt_num, big_tup, rid, recv_ip, recv_port):
         print('emit message to', recv_ip)
-        self._unicast(top_num, bolt_num, big_tup, rid, xor_id, recv_ip, recv_port)
-
-    def ack(self, rid, xor_id):
-        self._unicast(None, None, None, rid, xor_id, self.master, CRANE_MASTER_ACK_PORT)
+        self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, recv_port)
 
 
 class CraneSlave:
@@ -83,6 +78,8 @@ class CraneSlave:
     def slave_recevier(self):
         while True:
             try:
+                # message, addr = self.slave_receiver_socket.recvfrom(65535)
+                # msg = pk.loads(message)
                 conn, addr = self.slave_receiver_socket.accept()
                 chunks = []
                 while True:
@@ -91,8 +88,6 @@ class CraneSlave:
                         break  # EOF
                     chunks.append(content)
                 msg = pk.loads(b''.join(chunks))
-                # message, addr = self.slave_receiver_socket.recvfrom(65535)
-                # msg = pk.loads(message)
                 self.exec_msg(msg)
             except socket.timeout:
                 continue
@@ -102,12 +97,11 @@ class CraneSlave:
         bolt_num = msg['bolt']
         tuple_batch = msg['tup']
         rid = msg['rid']
-        xor_id = msg['xor_id']
         master_ip = msg['master']
         self.master = master_ip
         self.collector.set_master(master_ip)
         curr_bolt = self.topology_list[top_num].bolt_list[bolt_num]
-        curr_bolt.execute(top_num, bolt_num, rid, xor_id, tuple_batch, self.collector, self.membership_list)
+        curr_bolt.execute(top_num, bolt_num, rid, tuple_batch, self.collector, self.membership_list)
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ from app.word_count_topology import word_count_topology
 from app.page_rank_topology import page_rank_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from dfs.mmp_server import MmpServer
-from util import Tuple, TupleBatch, CRANE_MASTER_ACK_PORT, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT, \
+from util import Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL, CRANE_BATCH_SIZE
 
 
@@ -18,12 +18,6 @@ class CraneMaster:
         self.topology_list = [word_count_topology, page_rank_topology, twitter_user_filter_topology]
         self.topology_num = topology_num
         self.local_ip = socket.gethostbyname(socket.getfqdn())
-
-        # self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.ack_receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.ack_receiver_socket.bind(('0.0.0.0', CRANE_MASTER_ACK_PORT))
-        self.ack_receiver_socket.settimeout(2)
-        self.ack_receiver_socket.listen(10)
 
         # self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.aggregator_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -41,30 +35,9 @@ class CraneMaster:
         self.is_running = True
 
         # Multi thread
-        self.ack_receiver_thread = threading.Thread(target=self.ack_receiver)
         self.monitor_thread = threading.Thread(target=self.crane_monitor)
         self.aggregator_thread = threading.Thread(target=self.crane_aggregator)
-        self.ack_receiver_thread.start()
         self.aggregator_thread.start()
-
-    def ack_receiver(self):
-        while self.is_running:
-            try:
-                conn, addr = self.ack_receiver_socket.accept()
-                chunks = []
-                while True:
-                    content = conn.recv(1024)
-                    if not content:
-                        break  # EOF
-                    chunks.append(content)
-                msg = pk.loads(b''.join(chunks))
-                # message, addr = self.ack_receiver_socket.recvfrom(65535)
-                # msg = pk.loads(message)
-                rid = msg['rid']
-                old_rid = self.root_tup_ts_dict[rid][2]
-                self.root_tup_ts_dict[rid][2] = old_rid ^ msg['xor_id']
-            except socket.timeout:
-                continue
 
     def crane_monitor(self):
         while self.is_running:
@@ -102,7 +75,10 @@ class CraneMaster:
                         break  # EOF
                     chunks.append(content)
                 msg = pk.loads(b''.join(chunks))
+                rid = msg['rid']
                 tuple_batch = msg['tup']
+                old_rid = self.root_tup_ts_dict[rid][2]
+                self.root_tup_ts_dict[rid][2] = old_rid ^ rid
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
                     print(self.prefix, tup)
@@ -111,31 +87,28 @@ class CraneMaster:
                 continue
 
     def terminate(self):
-        self.ack_receiver_thread.join()
         self.monitor_thread.join()
         self.aggregator_thread.join()
 
-    def udp_unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def udp_unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         packet = pk.dumps({
             'topology': topology,
             'bolt': bolt,
             'tup': tup,
             'rid': rid,
-            'xor_id': xor_id,
             'master': self.local_ip
         })
         skt.sendto(packet, (ip, port))
         skt.close()
 
-    def _unicast(self, topology, bolt, tup, rid, xor_id, ip, port):
+    def _unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         packet = pk.dumps({
             'topology': topology,
             'bolt': bolt,
             'tup': tup,
             'rid': rid,
-            'xor_id': xor_id,
             'master': self.local_ip
         })
         connected = False
@@ -154,7 +127,7 @@ class CraneMaster:
         self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
         # Send to VM3 for testing purposes
         next_node_index = random.randint(0, len(self.slaves) - 1)
-        self._unicast(top_num, 0, tuple_batch, tuple_batch.uid, tuple_batch.uid,
+        self._unicast(top_num, 0, tuple_batch, tuple_batch.uid,
                       self.slaves[next_node_index], CRANE_SLAVE_PORT)
 
     def start_top(self):
