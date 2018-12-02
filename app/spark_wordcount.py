@@ -44,10 +44,6 @@ if __name__ == "__main__":
     counts = lines.flatMap(lambda line: line.split(" "))\
                   .map(lambda x: (x, 1))\
                   .reduceByKey(lambda a, b: a+b)
-    def saveCoord(rdd):
-            rdd.foreach(lambda rec: open("spark_test.txt", "a").write(
-                        "{"+rec.split(" ")[0]+":"+rec.split(" ")[1]+","+rec.split(" ")[2]+":"+rec.split(" ")[3]+"},\n"))
-    #counts.foreachRDD(saveCoord)
     counts.saveAsTextFiles("wordcount_output")
     counts.pprint()
 
