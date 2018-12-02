@@ -10,7 +10,7 @@ if __name__ == "__main__":
         print("Usage: hdfs_wordcount.py <directory>", file=sys.stderr)
         sys.exit(-1)
 
-    sc = SparkContext(appName="PythonStreamingHDFSWordCount")
+    sc = SparkContext(appName="PythonStreamingPageRank")
     ssc = StreamingContext(sc, 10)
 
     lines = ssc.textFileStream(sys.argv[1])
@@ -18,7 +18,7 @@ if __name__ == "__main__":
             .map(lambda x: (x[0], x[1]))\
             .reduceByKey(lambda a, b: a+b)
 
-    counts.saveAsTextFiles("wordcount_output")
+    counts.saveAsTextFiles("pr_output")
     counts.pprint()
 
     ssc.start()
