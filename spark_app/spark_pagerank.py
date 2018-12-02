@@ -21,11 +21,13 @@ if __name__ == "__main__":
             yield (u, 1/length)
 
     lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    ranks = lines.map(lambda l: len(l.split('\t')[1: ]))
+    ranks = lines.map(lambda l: 1/len(l.split('\t')[1: ]))
     links = lines.map(lambda l: l.split('\t')[1: ])
 
-    counts = links.join(ranks).flatMap(lambda x: computeContribs(x[1][0], x[1][1]))
+    counts = links.join(ranks)
+    counts = counts.flatMap(lambda (line,(nbs, score)): map(lambda nb: (nb, score), nbs))
     counts = counts.reduceByKey(lambda a, b: a+b)
+
     counts.saveAsTextFiles("pr_output")
     counts.pprint()
 
