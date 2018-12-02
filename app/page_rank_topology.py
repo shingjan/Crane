@@ -40,7 +40,7 @@ class ComputeContribsBolt(Bolt):
 
 
 page_rank_topology = Topology("PageRank Topology")
-page_rank_topology.set_spout('app/page_rank.csv')
+page_rank_topology.set_spout('app/pagerank_42k.csv')
 computeContribsBolt = ComputeContribsBolt()
 parseNeighborsBolt = ParseNeighborsBolt()
 page_rank_topology.set_bolt(parseNeighborsBolt)
