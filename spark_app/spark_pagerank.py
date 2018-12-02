@@ -5,31 +5,36 @@ import sys
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 
+
+def transform_to_url_tuple(string):
+    urls = string.split('\t')
+    return (urls[0], urls[1:])
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: hdfs_wordcount.py <directory>", file=sys.stderr)
+        print("Usage: hdfs_pagerank.py <directory>", file=sys.stderr)
         sys.exit(-1)
 
     sc = SparkContext(appName="PythonStreamingPageRank")
     ssc = StreamingContext(sc, 10)
 
     lines = ssc.textFileStream(sys.argv[1])
+    links = lines.filter(lambda l: len(l.split('\t')) > 1) \
+        .map(transform_to_url_tuple) \
+        .groupByKey()
+    ranks = links.map(lambda (name, neighbours): (name, 0.0))
 
-    def computeContribs(urls, length):
-        """Calculates URL contributions to the rank of other URLs."""
-        for u in urls:
-            yield (u, 1/length)
+    contribs = links \
+        .join(ranks) \
+        .flatMap(
+        lambda (name, (neighbours, score)): map(lambda neighbour: (neighbour, 1 / len(neighbours)), neighbours))
 
-    lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    ranks = lines.map(lambda l: 1/len(l.split('\t')[1: ]))
-    links = lines.map(lambda l: l.split('\t')[1: ])
+    ranks = contribs \
+        .reduceByKey(lambda score_by_a, score_by_b: score_by_a + score_by_b) \
 
-    counts = links.join(ranks)
-    counts = counts.flatMap(lambda (line,(nbs, score)): map(lambda nb: (nb, score), nbs))
-    counts = counts.reduceByKey(lambda a, b: a+b)
-
-    counts.saveAsTextFiles("pr_output")
-    counts.pprint()
+    ranks.saveAsTextFiles("pr_output")
+    ranks.pprint()
 
     ssc.start()
     ssc.awaitTermination()
