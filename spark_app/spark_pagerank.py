@@ -23,7 +23,7 @@ if __name__ == "__main__":
             yield (url, rank/num_urls)
 
     lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    ranks = lines.map(lambda l: (l[0], 1.0))
+    ranks = lines.map(lambda l: (l.split('\t')[0], 1.0))
     links = lines.map(lambda l: l.split('\t')[1: ])
 
     counts = links.join(ranks).flatMap(lambda x: computeContribs(x[1][0], x[1][1]))
