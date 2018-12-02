@@ -39,7 +39,6 @@ if __name__ == "__main__":
 
     sc = SparkContext(appName="PythonStreamingHDFSWordCount")
     ssc = StreamingContext(sc, 10)
-
     lines = ssc.textFileStream(sys.argv[1])
     counts = lines.flatMap(lambda line: line.split(" "))\
                   .map(lambda x: (x, 1))\
