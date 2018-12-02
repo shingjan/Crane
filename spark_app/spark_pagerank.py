@@ -15,17 +15,16 @@ if __name__ == "__main__":
 
     lines = ssc.textFileStream(sys.argv[1])
 
-    def computeContribs(urls):
+    def computeContribs(urls, length):
         """Calculates URL contributions to the rank of other URLs."""
-        num_urls = len(urls)
-        for url in urls:
-            yield (url, 1/num_urls)
+        for u in urls:
+            yield (u, 1/length)
 
     lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    #ranks = lines.map(lambda l: 1)
+    ranks = lines.map(lambda l: len(l.split('\t')[1: ]))
     links = lines.map(lambda l: l.split('\t')[1: ])
 
-    counts = links.flatMap(lambda x: computeContribs(x))
+    counts = links.join(ranks).flatMap(lambda x: computeContribs(x[1][0], x[1][1]))
     counta = counts.reduceByKey(lambda a, b: a+b)
     counts.saveAsTextFiles("pr_output")
     counts.pprint()
