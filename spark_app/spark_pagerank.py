@@ -22,10 +22,10 @@ if __name__ == "__main__":
             yield (url, 1/num_urls)
 
     lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    ranks = lines.map(lambda l: (l.split('\t')[0], 1.0))
+    #ranks = lines.map(lambda l: 1)
     links = lines.map(lambda l: l.split('\t')[1: ])
 
-    counts = links.join(ranks).flatMap(lambda x: computeContribs(x[0]))
+    counts = links.flatMap(lambda x: computeContribs(x))
     counta = counts.reduceByKey(lambda a, b: a+b)
     counts.saveAsTextFiles("pr_output")
     counts.pprint()
