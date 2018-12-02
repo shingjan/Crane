@@ -5,44 +5,24 @@ import sys
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: hdfs_wordcount.py <directory>", file=sys.stderr)
+        print("Usage: hdfs_pagerank.py <directory>", file=sys.stderr)
         sys.exit(-1)
 
     sc = SparkContext(appName="PythonStreamingPageRank")
     ssc = StreamingContext(sc, 10)
-
+    # 1 2 3 4; 2 3 5;
     lines = ssc.textFileStream(sys.argv[1])
+    links = lines.filter(lambda l: len(l.split('\t')) > 1) \
+        .map(lambda line: line.split("\t")[1:])
+    # [[2,3,4]; [3,5]]
+    contribs = links.flatMap(lambda neighbors: map(lambda neighbor: (neighbor, 1 / len(neighbors)), neighbors))
+    ranks = contribs.reduceByKey(lambda score_by_a, score_by_b: score_by_a + score_by_b)
 
-    def computeContribs(urls, length):
-        """Calculates URL contributions to the rank of other URLs."""
-        for u in urls:
-            yield (u, 1/length)
-
-    def combine_list(new_list, old_list):
-        re = []
-        for iterable in new_list:
-            for item in iterable:
-                re.append(item)
-        if old_list is None:
-            return re
-        s = set(re)
-        for iterable in old_list:
-            for item in iterable:
-                s.add(item)
-        return list(s)
-
-    lines = lines.filter(lambda l: len(l.split('\t')) > 1)
-    ranks = lines.map(lambda l: 1/len(l.split('\t')[1: ]))
-    links = lines.map(lambda l: l.split('\t')[1: ])
-
-    counts = links.join(ranks).groupByKey().updateStateByKey(combine_list)
-
-    counts = counts.reduceByKey(lambda a, b: a+b)
-
-    counts.saveAsTextFiles("pr_output")
-    counts.pprint()
+    ranks.saveAsTextFiles("pr_output")
+    ranks.pprint()
 
     ssc.start()
     ssc.awaitTermination()
