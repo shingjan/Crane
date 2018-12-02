@@ -7,7 +7,8 @@ python3 crane_master.py
 python3 crane_slave.py
 ~~~
 
-## DFS & MMP cmds
+## Membership protocol commands 
+P.S. Can be performed on slave node(s) exclusively
 
 List all members in local list as well as its three neighbors
 
@@ -36,19 +37,4 @@ Leave the group permanently, the same as ctrl+c
 
 ~~~
 exit
-~~~
-
-Show all files stored on current VM:
-
-~~~
-store
-~~~
-
-DFS commands on client side:
-~~~
-put localfilename sdfsfilename:
-get sdfsfilename localfilename:
-delete sdfsfilename:
-ls sdfsfilename
-get-versions sdfsfilename numversions localfilename
 ~~~
