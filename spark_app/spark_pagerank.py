@@ -14,16 +14,20 @@ if __name__ == "__main__":
     ssc = StreamingContext(sc, 10)
 
     lines = ssc.textFileStream(sys.argv[1])
-    #lines = lines.flatMap(lambda line: [(i, 1/len(line.split(",")[1: ])) for i in line.split(",")[1: ]])
-    def func(l):
-        if not l.split('\t')[1: ]:
-            return 0
-        return 1/len(l.split('\t')[1: ])
 
-    temp = lines.map(func)
-    lines = lines.map(lambda line: line.split('\t')[1: ])
 
-    counts = lines.join(temp).reduceByKey(lambda a, b: a+b)
+    def computeContribs(urls, rank):
+        """Calculates URL contributions to the rank of other URLs."""
+        num_urls = len(urls)
+        for url in urls:
+            yield (url, 1/num_urls)
+
+    lines = lines.filter(lambda l: len(l.split('\t')) > 1)
+    ranks = lines.map(lambda l: 1/len(l.split('\t')[1: ]))
+    links = lines.map(lambda l: l.split('\t')[1: ])
+
+    counts = links.join(ranks).flatMap(lambda x: computeContribs(x[0], x[1]))
+    counta = counts.reduceByKey(lambda a, b: a+b)
     counts.saveAsTextFiles("pr_output")
     counts.pprint()
 
