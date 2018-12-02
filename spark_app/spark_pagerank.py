@@ -25,7 +25,7 @@ if __name__ == "__main__":
     links = lines.map(lambda l: l.split('\t')[1: ])
 
     counts = links.join(ranks).flatMap(lambda x: computeContribs(x[1][0], x[1][1]))
-    counta = counts.reduceByKey(lambda a, b: a+b)
+    counts = counts.reduceByKey(lambda a, b: a+b)
     counts.saveAsTextFiles("pr_output")
     counts.pprint()
 
