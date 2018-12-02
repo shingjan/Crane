@@ -14,10 +14,11 @@ if __name__ == "__main__":
     ssc = StreamingContext(sc, 10)
 
     lines = ssc.textFileStream(sys.argv[1])
-    counts = lines.flatMap(lambda line: line.split(","))\
-                 .filter(lambda x: x.isdigit() and x > 50)\
-                 .map(lambda x: ('result', 1))\
-                 .reduceByKey(lambda a, b: a+b)
+    lines = lines.flatMap(lambda line: line.split(","))\
+                 .filter(lambda x: x.isdigit() and int(x) > 50)
+
+    counts = lines.map(lambda x: ('result', 1))\
+                  .reduceByKey(lambda a, b: a+b)
 
     counts.saveAsTextFiles("tt_output")
     counts.pprint()
