@@ -15,7 +15,12 @@ if __name__ == "__main__":
 
     lines = ssc.textFileStream(sys.argv[1])
     #lines = lines.flatMap(lambda line: [(i, 1/len(line.split(",")[1: ])) for i in line.split(",")[1: ]])
-    temp = lines.map(lambda line: 1/len(line.split('\t')[1: ]))
+    def func(l):
+        if not l.split('\t')[1: ]:
+            return 0
+        return 1/len(l.split('\t')[1: ])
+
+    temp = lines.map(func)
     lines = lines.map(lambda line: line.split('\t')[1: ])
 
     counts = lines.join(temp).reduceByKey(lambda a, b: a+b)
