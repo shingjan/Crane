@@ -16,6 +16,7 @@ class FilterBolt(Bolt):
                 new_tuple_batch.add_tuple(tmp_tuple)
         collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid)
 
+
 class CountBolt(Bolt):
     def __init__(self):
         self.counter = 0

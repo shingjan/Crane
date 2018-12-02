@@ -4,7 +4,7 @@ import socket
 import random
 from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
-from app.twitter_user_filter import twitter_user_filter_topology
+from app.twitter_user_filter_topology import twitter_user_filter_topology
 from app.page_rank_topology import page_rank_topology
 from util import CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
 

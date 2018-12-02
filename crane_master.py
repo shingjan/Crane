@@ -7,7 +7,7 @@ import _pickle as cpk
 from collections import defaultdict
 from app.word_count_topology import word_count_topology
 from app.page_rank_topology import page_rank_topology
-from app.twitter_user_filter import twitter_user_filter_topology
+from app.twitter_user_filter_topology import twitter_user_filter_topology
 from dfs.mmp_server import MmpServer
 from util import Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT, \
     CRANE_MAX_INTERVAL, CRANE_BATCH_SIZE
