@@ -168,7 +168,7 @@ if __name__ == '__main__':
         mmpServer.run_without_cmd()
     while True:
         cmd = input("There are three applications available: WordCount, "
-                    "TwitterUserFilter, Banana. Enter 1-3 to run one of them: ")
+                    "PageRank and TwitterUserFilter. Enter 1-3 to run one of them: ")
         if cmd == '1':
             print('Submitting Application: <WordCount> ......')
             time.sleep(1)
