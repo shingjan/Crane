@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     lines = ssc.textFileStream(sys.argv[1])
     counts = lines.flatMap(lambda line: line.split(","))\
-                 .filter(lambda x: (x.isdigit() and x > 50))\
+                 .filter(lambda x: x.isdigit() and x > 50)\
                  .map(lambda x: ('result', 1))\
                  .reduceByKey(lambda a, b: a+b)
 
