@@ -39,7 +39,7 @@ class CountBolt(Bolt):
 
 
 word_count_topology = Topology("WordCount Topology")
-word_count_topology.set_spout('app/wordcount2MB.csv')
+word_count_topology.set_spout('app/wordcount700b.csv')
 splitBolt = SplitBolt()
 countBolt = CountBolt()
 word_count_topology.set_bolt(splitBolt)
