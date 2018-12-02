@@ -18,7 +18,7 @@ if __name__ == "__main__":
     links = lines.filter(lambda l: len(l.split('\t')) > 1) \
         .map(lambda line: line.split("\t")[1:])
     # [[2,3,4]; [3,5]]
-    contribs = links.flatMap(lambda neighbors: map(lambda neighbor: (neighbor, 1 / len(neighbors)), neighbors))
+    contribs = links.flatMap(lambda neighbors: map(lambda neighbor: (neighbor, 1 / len(neighbors - 1)), neighbors))
     ranks = contribs.reduceByKey(lambda score_by_a, score_by_b: score_by_a + score_by_b)
 
     ranks.saveAsTextFiles("pr_output")
