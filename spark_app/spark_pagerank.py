@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # 1 2 3 4; 2 3 5;
     lines = ssc.textFileStream(sys.argv[1])
     links = lines.filter(lambda l: len(l.split('\t')) > 1) \
-        .map(lambda line: line.split("\t"))
+        .map(lambda line: line.split("\t")[1:])
     # [[2,3,4]; [3,5]]
     contribs = links.flatMap(lambda neighbors: map(lambda neighbor: (neighbor, 1 / len(neighbors)), neighbors))
     ranks = contribs.reduceByKey(lambda score_by_a, score_by_b: score_by_a + score_by_b)
