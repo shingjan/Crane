@@ -13,7 +13,7 @@ class ParseNeighborsBolt(Bolt):
             tup = tup.replace("\n", "")
             url_list = tup.split('\t')
             urls = [url_list[i] for i in range(len(url_list)) if i != 0]
-            weight = len(urls)
+            weight = len(urls) + 1
             for url in urls:
                 tmp_tuple = Tuple((url, 1/weight))
                 new_tuple_batch.add_tuple(tmp_tuple)
