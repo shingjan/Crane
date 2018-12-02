@@ -53,8 +53,8 @@ class CraneMaster:
                 else:
                     time_spent = time.time() - time_stamp
                     if time_spent >= CRANE_MAX_INTERVAL:
-                        print(self.prefix, 'TupleBatch', tup.uid,
-                              ' has been processed more than ', CRANE_MAX_INTERVAL, ' secs. Re-running it...')
+                        print(self.prefix, 'TupleBatch ', tup.uid,
+                              ' processed more than ', CRANE_MAX_INTERVAL, ' secs. Re-running it...')
                         self.emit(tup, self.topology_num)
             if finished == len(root_tup_ts_dict):
                 print(self.prefix, 'All tuples has been fully processed. Fetching final results...')
@@ -64,16 +64,22 @@ class CraneMaster:
     def crane_aggregator(self):
         while self.is_running:
             try:
-                # message, addr = self.aggregator_socket.recvfrom(65535)
-                # msg = pk.loads(message)
                 conn, addr = self.aggregator_socket.accept()
                 chunks = []
+                # bytes_recv = conn.recv(4)
+                # total_length = pk.loads(bytes_recv)
+                bytes_recd = 0
                 while True:
                     content = conn.recv(1024)
                     if not content:
                         break  # EOF
                     chunks.append(content)
-                msg = pk.loads(b''.join(chunks))
+                    bytes_recd += len(content)
+                try:
+                    msg = pk.loads(b''.join(chunks))
+                except EOFError:
+                    print(self.prefix, 'Connection interrupted. Abort')
+                    continue
                 rid = msg['rid']
                 tuple_batch = msg['tup']
                 old_rid = self.root_tup_ts_dict[rid][2]
@@ -111,22 +117,18 @@ class CraneMaster:
             'rid': rid,
             'master': self.local_ip
         })
-        connected = False
-        # print('try to connect to ip: ', ip, ' with port', port)
-        while not connected:
-            try:
-                skt.connect((ip, port))
-                connected = True
-            except socket.timeout:
-                continue
-        print(len(packet))
-        total_sent = 0
-        while total_sent < len(packet):
-            sent = skt.send(packet[total_sent:])
-            if sent == 0:
-                raise RuntimeError("socket connection broken")
-            total_sent = total_sent + sent
-        skt.shutdown(socket.SHUT_RDWR)
+        try:
+            skt.connect((ip, port))
+            total_sent = 0
+            # skt.send(pk.dumps(len(packet)))
+            while total_sent < len(packet):
+                sent = skt.send(packet[total_sent:])
+                if sent == 0:
+                    raise RuntimeError("socket connection broken")
+                total_sent = total_sent + sent
+            skt.shutdown(socket.SHUT_RDWR)
+        except ConnectionRefusedError:
+            print(self.prefix, "Connection Refused with ", ip, " Emit abort.")
         skt.close()
 
     def emit(self, tuple_batch, top_num):

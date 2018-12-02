@@ -1,5 +1,4 @@
-import random
-from util import Bolt, Topology, Tuple, TupleBatch, CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
+from util import Bolt, Topology, Tuple, TupleBatch
 
 
 class SplitBolt(Bolt):
@@ -8,7 +7,6 @@ class SplitBolt(Bolt):
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
         new_tuple_batch = TupleBatch()
-        next_node_index = random.randint(1, len(mmp_list) - 1)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
@@ -16,8 +14,7 @@ class SplitBolt(Bolt):
             for word in words:
                 tmp_tuple = Tuple(word)
                 new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid,
-                       mmp_list[next_node_index][0], CRANE_SLAVE_PORT)
+        collector.emit(top_num, bolt_num + 1, new_tuple_batch, rid)
 
 
 class CountBolt(Bolt):
@@ -37,8 +34,7 @@ class CountBolt(Bolt):
         for word, count in self.counts.items():
             tmp_tuple = Tuple((word, count))
             new_tuple_batch.add_tuple(tmp_tuple)
-        collector.emit(top_num, bolt_num, new_tuple_batch, rid,
-                       collector.master, CRANE_AGGREGATOR_PORT)
+        collector.ack(top_num, bolt_num, new_tuple_batch, rid)
         self.counts.clear()
 
 

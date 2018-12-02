@@ -1,16 +1,19 @@
 import pickle as pk
 import threading
 import socket
+import random
 from dfs.mmp_server import MmpServer
 from app.word_count_topology import word_count_topology
 from app.twitter_user_filter import twitter_user_filter_topology
 from app.page_rank_topology import page_rank_topology
-from util import CRANE_SLAVE_PORT
+from util import CRANE_SLAVE_PORT, CRANE_AGGREGATOR_PORT
 
 
 class Collector:
-    def __init__(self, master):
-        self.master = master
+    def __init__(self, mmp_list):
+        self.mmp_list = mmp_list
+        self.prefix = "COLLECTOR - [INFO]: "
+        self.master = mmp_list[0][0]
 
     def udp_unicast(self, topology, bolt, tup, rid, ip, port):
         skt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -33,30 +36,31 @@ class Collector:
             'rid': rid,
             'master': self.master
         })
-        connected = False
-        # print('try to connect to ip: ', ip, ' with port', port)
-        while not connected:
-            try:
-                skt.connect((ip, port))
-                connected = True
-            except socket.timeout:
-                continue
-        print(len(packet))
-        total_sent = 0
-        while total_sent < len(packet):
-            sent = skt.send(packet[total_sent:])
-            if sent == 0:
-                raise RuntimeError("socket connection broken")
-            total_sent = total_sent + sent
-        skt.shutdown(socket.SHUT_RDWR)
+        try:
+            skt.connect((ip, port))
+            total_sent = 0
+            # skt.send(pk.dumps(len(packet)))
+            while total_sent < len(packet):
+                sent = skt.send(packet[total_sent:])
+                if sent == 0:
+                    raise RuntimeError("socket connection broken")
+                total_sent = total_sent + sent
+            skt.shutdown(socket.SHUT_RDWR)
+        except ConnectionRefusedError:
+            print(self.prefix, "Connection Refused with ", ip, " Emit abort.")
         skt.close()
 
     def set_master(self, master):
         self.master = master
 
-    def emit(self, top_num, bolt_num, big_tup, rid, recv_ip, recv_port):
-        print('emit message to', recv_ip)
-        self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, recv_port)
+    def emit(self, top_num, bolt_num, big_tup, rid):
+        recv_ip = self.mmp_list[random.randint(1, len(self.mmp_list) - 1)][0]
+        print(self.prefix, 'emit message to', recv_ip)
+        self._unicast(top_num, bolt_num, big_tup, rid, recv_ip, CRANE_SLAVE_PORT)
+
+    def ack(self, top_num, bolt_num, big_tup, rid):
+        print(self.prefix, 'emit message to', self.master)
+        self._unicast(top_num, bolt_num, big_tup, rid, self.master, CRANE_AGGREGATOR_PORT)
 
 
 class CraneSlave:
@@ -73,7 +77,7 @@ class CraneSlave:
 
         self.master = None
         self.prefix = "SLAVE - [INFO]: "
-        self.collector = Collector(None)
+        self.collector = Collector(self.membership_list)
 
     def run(self):
         self.slave_receiver_thread.start()
@@ -88,12 +92,20 @@ class CraneSlave:
                 # msg = pk.loads(message)
                 conn, addr = self.slave_receiver_socket.accept()
                 chunks = []
+                # bytes_recv = conn.recv(6)
+                # total_length = pk.loads(bytes_recv)
+                bytes_recd = 0
                 while True:
                     content = conn.recv(1024)
                     if not content:
                         break  # EOF
                     chunks.append(content)
-                msg = pk.loads(b''.join(chunks))
+                    bytes_recd += len(content)
+                try:
+                    msg = pk.loads(b''.join(chunks))
+                except EOFError:
+                    print(self.prefix, 'Connection interrupted. Abort')
+                    continue
                 conn.close()
                 self.exec_msg(msg)
             except socket.timeout:
