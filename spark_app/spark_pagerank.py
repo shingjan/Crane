@@ -20,12 +20,25 @@ if __name__ == "__main__":
         for u in urls:
             yield (u, 1/length)
 
+    def combine_list(new_list, old_list):
+        re = []
+        for iterable in new_list:
+            for item in iterable:
+                re.append(item)
+        if old_list is None:
+            return re
+        s = set(re)
+        for iterable in old_list:
+            for item in iterable:
+                s.add(item)
+        return list(s)
+
     lines = lines.filter(lambda l: len(l.split('\t')) > 1)
     ranks = lines.map(lambda l: 1/len(l.split('\t')[1: ]))
     links = lines.map(lambda l: l.split('\t')[1: ])
 
-    counts = links.join(ranks)
-    counts = counts.flatMap(lambda (line,(nbs, score)): map(lambda nb: (nb, score), nbs))
+    counts = links.join(ranks).groupByKey().updateStateByKey(combine_list)
+
     counts = counts.reduceByKey(lambda a, b: a+b)
 
     counts.saveAsTextFiles("pr_output")
