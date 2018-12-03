@@ -79,6 +79,8 @@ class CraneMaster:
                     msg = pk.loads(b''.join(chunks))
                 except EOFError:
                     print(self.prefix, 'Connection interrupted. Abort')
+                    conn.shutdown(socket.SHUT_RDWR)
+                    conn.close()
                     continue
                 rid = msg['rid']
                 tuple_batch = msg['tup']
@@ -86,6 +88,9 @@ class CraneMaster:
                 old_ts = self.root_tup_ts_dict[rid][1]
                 old_rid = self.root_tup_ts_dict[rid][2]
                 if ts != old_ts:
+                    print(self.prefix, 'Outdated packets received. Drop')
+                    conn.shutdown(socket.SHUT_RDWR)
+                    conn.close()
                     continue
                 self.root_tup_ts_dict[rid][2] = old_rid ^ rid
                 for big_tup in tuple_batch.tuple_list:

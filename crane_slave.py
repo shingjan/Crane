@@ -111,6 +111,8 @@ class CraneSlave:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
                 self.exec_msg(msg)
+                conn.shutdown(socket.SHUT_RDWR)
+                conn.close()
             except socket.timeout:
                 continue
 
