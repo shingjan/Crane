@@ -1,6 +1,6 @@
 # Crane - Stream Processing integrated with 
-## 1. a Heart-beat membership protocol 
-## 2. a slightly-off distributed file system
+## 1. A heart-beat membership protocol 
+## 2. A slightly-off distributed file system
 
 Run Crane master/slave on each node
 
