@@ -135,7 +135,7 @@ class CraneMaster:
         skt.close()
 
     def emit(self, tuple_batch, top_num):
-        self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.timestamp]
+        self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, tuple_batch.timestamp, tuple_batch.uid]
         next_node_index = random.randint(1, len(self.mmp_list) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid,
                       self.mmp_list[next_node_index][0], CRANE_SLAVE_PORT)
