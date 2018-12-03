@@ -45,7 +45,7 @@ class Collector:
                     sent = skt.send(packet[total_sent:])
                 except ConnectionResetError:
                     print(self.prefix, 'Connection reset by peer: ', ip, 'Unicast abort.')
-                    break
+                    return
                 if sent == 0:
                     raise RuntimeError("socket connection broken")
                 total_sent = total_sent + sent
