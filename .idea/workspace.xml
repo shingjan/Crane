@@ -42,7 +42,7 @@
         <counts>
           <entry key="dummy" value="9" />
           <entry key="md" value="161" />
-          <entry key="py" value="14864" />
+          <entry key="py" value="14866" />
           <entry key="sh" value="33" />
           <entry key="topology" value="124" />
         </counts>
@@ -52,7 +52,7 @@
           <entry key="Bash" value="1" />
           <entry key="Markdown" value="161" />
           <entry key="PLAIN_TEXT" value="41" />
-          <entry key="Python" value="14988" />
+          <entry key="Python" value="14990" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -79,8 +79,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/crane_master.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="137" column="84" selection-start-line="137" selection-start-column="84" selection-end-line="137" selection-end-column="84" />
+            <state relative-caret-position="226">
+              <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -466,8 +466,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/crane_master.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="137" column="84" selection-start-line="137" selection-start-column="84" selection-end-line="137" selection-end-column="84" />
+        <state relative-caret-position="226">
+          <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

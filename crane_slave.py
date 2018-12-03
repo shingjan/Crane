@@ -41,13 +41,17 @@ class Collector:
             total_sent = 0
             # skt.send(pk.dumps(len(packet)))
             while total_sent < len(packet):
-                sent = skt.send(packet[total_sent:])
+                try:
+                    sent = skt.send(packet[total_sent:])
+                except ConnectionResetError:
+                    print(self.prefix, 'Connection reset by peer: ', ip, 'Unicast abort.')
+                    break
                 if sent == 0:
                     raise RuntimeError("socket connection broken")
                 total_sent = total_sent + sent
             skt.shutdown(socket.SHUT_RDWR)
         except ConnectionRefusedError:
-            print(self.prefix, "Connection Refused with ", ip, " Emit abort.")
+            print(self.prefix, "Connection Refused with ", ip, " Unicast abort.")
         skt.close()
 
     def set_master(self, master):
