@@ -140,6 +140,7 @@ class CraneMaster:
         skt.close()
 
     def emit(self, tuple_batch, top_num):
+        tuple_batch.timestamp = time.time()
         self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, tuple_batch.timestamp, tuple_batch.uid]
         next_node_index = random.randint(1, len(self.mmp_list) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid,
