@@ -6,10 +6,9 @@ class ParseNeighborsBolt(Bolt):
         super(ParseNeighborsBolt, self).__init__('ParseNeighborsBolt')
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
-        new_tuple_batch = TupleBatch()
+        new_tuple_batch = TupleBatch(tuple_batch.timestamp)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
-            #print(tup)
             tup = tup.replace("\n", "")
             url_list = tup.split('\t')
             urls = [url_list[i] for i in range(len(url_list)) if i != 0]
@@ -26,7 +25,7 @@ class ComputeContribsBolt(Bolt):
         super(ComputeContribsBolt, self).__init__('ComputeContribsBolt')
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
-        new_tuple_batch = TupleBatch()
+        new_tuple_batch = TupleBatch(tuple_batch.timestamp)
         for big_tup in tuple_batch.tuple_list:
             url, rank = big_tup.tup
             if url in self.ranks:

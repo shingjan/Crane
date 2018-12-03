@@ -45,9 +45,10 @@ class Tuple:
 
 
 class TupleBatch:
-    def __init__(self):
+    def __init__(self, ts):
         self.tuple_list = []
         self.uid = 0
+        self.timestamp = ts
 
     def add_tuple(self, big_tuple):
         self.tuple_list.append(big_tuple)

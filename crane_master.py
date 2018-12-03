@@ -82,8 +82,12 @@ class CraneMaster:
                     continue
                 rid = msg['rid']
                 tuple_batch = msg['tup']
+                ts = tuple_batch.timestamp
+                old_ts = self.root_tup_ts_dict[rid][1]
                 old_rid = self.root_tup_ts_dict[rid][2]
                 self.root_tup_ts_dict[rid][2] = old_rid ^ rid
+                if ts != old_ts:
+                    continue
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
                     print(self.prefix, tup)
@@ -131,7 +135,7 @@ class CraneMaster:
         skt.close()
 
     def emit(self, tuple_batch, top_num):
-        self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.uid]
+        self.root_tup_ts_dict[tuple_batch.uid] = [tuple_batch, time.time(), tuple_batch.timestamp]
         next_node_index = random.randint(1, len(self.mmp_list) - 1)
         self._unicast(top_num, 0, tuple_batch, tuple_batch.uid,
                       self.mmp_list[next_node_index][0], CRANE_SLAVE_PORT)
@@ -139,7 +143,7 @@ class CraneMaster:
     def start_top(self):
         curr_top = self.topology_list[self.topology_num]
         print(self.prefix, curr_top.name, " starting...")
-        tuple_batch = TupleBatch()
+        tuple_batch = TupleBatch(time.time())
         while True:
             tup = curr_top.spout.next_tup()
             if not tup:
@@ -150,7 +154,7 @@ class CraneMaster:
                 tuple_batch.add_tuple(big_tuple)
                 if len(tuple_batch.tuple_list) >= CRANE_BATCH_SIZE:
                     self.emit(tuple_batch, self.topology_num)
-                    tuple_batch = TupleBatch()
+                    tuple_batch = TupleBatch(time.time())
         print(self.prefix + 'All tuples transmitted. Spout closed down.')
         self.monitor_thread.start()
 

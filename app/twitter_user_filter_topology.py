@@ -6,7 +6,7 @@ class FilterBolt(Bolt):
         super(FilterBolt, self).__init__('SplitBolt')
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
-        new_tuple_batch = TupleBatch()
+        new_tuple_batch = TupleBatch(tuple_batch.timestamp)
         for big_tup in tuple_batch.tuple_list:
             tup = big_tup.tup
             tup = tup.replace("\n", "")
@@ -23,7 +23,7 @@ class CountBolt(Bolt):
         super(CountBolt, self).__init__('CountBolt')
 
     def execute(self, top_num, bolt_num, rid, tuple_batch, collector, mmp_list):
-        new_tuple_batch = TupleBatch()
+        new_tuple_batch = TupleBatch(tuple_batch.timestamp)
         for big_tuple in tuple_batch.tuple_list:
             word = big_tuple.tup
             self.counter += word[1]
