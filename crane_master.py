@@ -85,9 +85,9 @@ class CraneMaster:
                 ts = tuple_batch.timestamp
                 old_ts = self.root_tup_ts_dict[rid][1]
                 old_rid = self.root_tup_ts_dict[rid][2]
-                self.root_tup_ts_dict[rid][2] = old_rid ^ rid
                 if ts != old_ts:
                     continue
+                self.root_tup_ts_dict[rid][2] = old_rid ^ rid
                 for big_tup in tuple_batch.tuple_list:
                     tup = big_tup.tup
                     print(self.prefix, tup)
