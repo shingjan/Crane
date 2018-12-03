@@ -1,4 +1,4 @@
-# mp4-ys26-weilinz2
+# Crane - Stream Processing integrated with a Heart-beat membership protocol and a slightly-off distributed file system
 
 Run Crane master/slave on each node
 
