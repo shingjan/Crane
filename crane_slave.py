@@ -106,7 +106,6 @@ class CraneSlave:
                 except EOFError:
                     print(self.prefix, 'Connection interrupted. Abort')
                     continue
-                conn.close()
                 self.exec_msg(msg)
             except socket.timeout:
                 continue

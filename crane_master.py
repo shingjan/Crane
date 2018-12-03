@@ -88,7 +88,6 @@ class CraneMaster:
                     tup = big_tup.tup
                     print(self.prefix, tup)
                     self.final_result[tup[0]] += tup[1]
-                conn.close()
             except socket.timeout:
                 continue
 
