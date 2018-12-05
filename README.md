@@ -3,7 +3,9 @@
 ### 2. A slightly-off distributed file system
 
 Run Crane master/slave on each node 
-p.s. Master need to be run on the leader node defined in our membership protocol,
+
+P.S. Master need to be run on the leader node defined in our membership protocol,
+
 which is the one with the lowest id defined in /env.py
 
 ~~~
