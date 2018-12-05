@@ -1,4 +1,4 @@
-# Crane - Stream Processing integrated with 
+# Crane - Stream Processing System (like Apache Storm!) with 
 ### 1. A heart-beat membership protocol 
 ### 2. A slightly-off distributed file system
 
